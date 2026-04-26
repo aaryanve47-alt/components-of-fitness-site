@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Components of Fitness</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --c1: #FF6B6B; --c2: #FFD93D; --c3: #6BCB77; --c4: #4D96FF; --c5: #C77DFF;
+    --bg: #0d0d16; --surface: #16162a; --surface2: #1e1e35; --text: #f5f4ff; --muted: #9896b8;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; overflow-x: hidden; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    padding: 1rem 3rem; display: flex; justify-content: space-between; align-items: center;
+    background: rgba(13,13,22,0.88); backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 3px;
+    background: linear-gradient(135deg, var(--c1), var(--c5));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center; padding: 8rem 2rem 5rem; position: relative; overflow: hidden;
+  }
+  .hero-orbs { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; animation: float 8s ease-in-out infinite alternate; }
+  .orb1 { width: 420px; height: 420px; background: var(--c1); top: -100px; left: -120px; }
+  .orb2 { width: 380px; height: 380px; background: var(--c4); top: -80px; right: -100px; animation-delay: -2s; }
+  .orb3 { width: 300px; height: 300px; background: var(--c5); bottom: 0; left: 30%; animation-delay: -4s; }
+  .orb4 { width: 260px; height: 260px; background: var(--c3); bottom: 50px; right: -60px; animation-delay: -6s; }
+  @keyframes float { 0%{transform:translateY(0) scale(1)} 100%{transform:translateY(-40px) scale(1.06)} }
+
+  .hero-content { position: relative; z-index: 1; max-width: 820px; }
+  .hero-tag { display: inline-block; margin-bottom: 1.5rem; padding: 0.4rem 1.2rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 50px; font-size: 0.78rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
+  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5rem, 14vw, 10rem); line-height: 0.9; letter-spacing: 3px; margin-bottom: 1.5rem; }
+  .hero h1 .line2 { background: linear-gradient(90deg, var(--c1) 0%, var(--c2) 30%, var(--c3) 55%, var(--c4) 80%, var(--c5) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; }
+  .hero-sub { font-size: 1.05rem; color: var(--muted); line-height: 1.8; max-width: 520px; margin: 0 auto 2.5rem; }
+  .hero-badges { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; }
+  .badge { padding: 0.45rem 1.1rem; border-radius: 50px; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.5px; }
+  .cta-btn { display: inline-block; padding: 1rem 3rem; border-radius: 50px; font-weight: 800; font-size: 1rem; text-decoration: none; letter-spacing: 0.5px; background: linear-gradient(135deg, var(--c1), var(--c5)); color: #fff; transition: transform 0.25s, box-shadow 0.25s; box-shadow: 0 8px 30px rgba(255,107,107,0.35); }
+  .cta-btn:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(255,107,107,0.5); }
+  .scroll-hint { margin-top: 3.5rem; color: var(--muted); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; animation: bounce 2.2s infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(7px)} }
+
+  #components { padding: 6rem 2rem; }
+  .sec-label { text-align: center; font-size: 0.75rem; font-weight: 800; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 0.6rem; background: linear-gradient(90deg, var(--c1), var(--c5)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .sec-title { text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem, 7vw, 5rem); letter-spacing: 2px; margin-bottom: 0.4rem; }
+  .sec-sub { text-align: center; color: var(--muted); font-size: 0.95rem; margin-bottom: 4rem; }
+
+  .cards-wrap { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.8rem; }
+
+  .comp-card {
+    background: var(--surface); border-radius: 24px;
+    border: 1.5px solid rgba(255,255,255,0.07);
+    cursor: pointer; overflow: hidden;
+    transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    position: relative;
+  }
+  .comp-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:6px; background:var(--card-color); transition:width 0.3s; }
+  .comp-card:hover { border-color: var(--card-color); transform: translateX(4px); }
+  .comp-card:hover::before { width:10px; }
+  .comp-card.open { border-color: var(--card-color); box-shadow: 0 16px 50px rgba(0,0,0,0.5); }
+  .comp-card.open::before { width: 10px; }
+
+  .card-header { display: grid; grid-template-columns: 80px 1fr auto; align-items: center; gap: 1.5rem; padding: 1.8rem 2rem 1.8rem 2.5rem; }
+  .card-num { font-family:'Bebas Neue',sans-serif; font-size:3.5rem; line-height:1; color:var(--card-color); text-align:center; }
+  .card-name { font-family:'Bebas Neue',sans-serif; font-size:1.7rem; letter-spacing:1px; margin-bottom:0.35rem; }
+  .card-tagline { color:var(--muted); font-size:0.9rem; line-height:1.6; }
+  .card-icon-wrap { width:36px; height:36px; border-radius:50%; border:1.5px solid rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:1.1rem; font-weight:700; transition:transform 0.3s,background 0.3s,border-color 0.3s; flex-shrink:0; }
+  .comp-card.open .card-icon-wrap { transform:rotate(45deg); background:var(--card-color); border-color:transparent; color:#fff; }
+
+  .card-body { max-height:0; overflow:hidden; transition:max-height 0.6s ease; }
+  .comp-card.open .card-body { max-height:1200px; }
+
+  .card-body-inner { padding: 0 2rem 2rem 2.5rem; border-top:1px solid rgba(255,255,255,0.07); padding-top:1.8rem; margin-left:80px; }
+
+  /* DEFINITION BLOCK */
+  .def-block { background:var(--surface2); border-radius:16px; padding:1.5rem; margin-bottom:1.5rem; border-left:4px solid var(--card-color); }
+  .def-block h4 { font-size:0.7rem; font-weight:800; letter-spacing:3px; text-transform:uppercase; color:var(--card-color); margin-bottom:0.6rem; }
+  .def-block p { font-size:0.95rem; line-height:1.8; color:var(--text); }
+
+  /* SECTION GRID */
+  .info-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+  .info-tile { background:var(--surface2); border-radius:14px; padding:1.2rem 1.3rem; }
+  .info-tile h4 { font-size:0.68rem; font-weight:800; letter-spacing:2.5px; text-transform:uppercase; color:var(--card-color); margin-bottom:0.6rem; }
+  .info-tile p, .info-tile ul { font-size:0.88rem; line-height:1.75; color:var(--muted); }
+  .info-tile ul { padding-left:1.1rem; }
+  .info-tile ul li { margin-bottom:0.3rem; }
+
+  /* EXAMPLES ROW */
+  .examples-row { display:flex; flex-wrap:wrap; gap:0.6rem; margin-bottom:1.5rem; }
+  .ex-chip { padding:0.45rem 1rem; border-radius:50px; font-size:0.8rem; font-weight:700; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:var(--text); }
+
+  /* FACT BAR */
+  .fact-bar { display:flex; gap:1rem; flex-wrap:wrap; }
+  .fact-pill { padding:0.5rem 1.1rem; border-radius:50px; font-size:0.78rem; font-weight:800; }
+
+  /* WHEEL */
+  #wheel { padding: 6rem 2rem; background: var(--surface); }
+  .wheel-inner { max-width:800px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; }
+  @media(max-width:650px){ .wheel-inner{grid-template-columns:1fr;} }
+  .wheel-svg-wrap { display:flex; justify-content:center; }
+  .wheel-info-box { background:var(--surface2); border-radius:20px; padding:2rem; border:1px solid rgba(255,255,255,0.07); min-height:240px; display:flex; flex-direction:column; justify-content:center; }
+  .wi-num { font-family:'Bebas Neue',sans-serif; font-size:3.5rem; line-height:1; margin-bottom:0.3rem; }
+  .wi-name { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:1px; margin-bottom:0.7rem; }
+  .wi-desc { color:var(--muted); font-size:0.88rem; line-height:1.7; margin-bottom:0.8rem; }
+  .wi-fact { font-size:0.8rem; font-weight:700; padding:0.4rem 1rem; border-radius:50px; display:inline-block; }
+  .wi-hint { color:var(--muted); font-size:0.85rem; font-style:italic; }
+  .wheel-slice { cursor:pointer; }
+  .wheel-slice path { transition:opacity 0.2s; }
+  .wheel-slice:hover path { opacity:0.78; }
+  .wheel-slice.selected path { filter:brightness(1.3); }
+
+  /* QUIZ */
+  #quiz { padding: 6rem 2rem; }
+  .quiz-card { max-width:680px; margin:0 auto; background:var(--surface); border-radius:24px; padding:2.5rem; border:1px solid rgba(255,255,255,0.08); }
+  .quiz-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.8rem; }
+  .quiz-qnum { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:2px; color:var(--muted); }
+  .quiz-bar { flex:1; margin:0 1rem; height:4px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden; }
+  .quiz-bar-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--c1),var(--c5)); transition:width 0.4s; }
+  .quiz-q { font-size:1.08rem; font-weight:700; line-height:1.65; margin-bottom:1.8rem; }
+  .quiz-opts { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
+  .qopt { padding:0.9rem 1.1rem; border-radius:12px; background:var(--surface2); border:1.5px solid rgba(255,255,255,0.07); color:var(--text); font-size:0.88rem; font-weight:600; cursor:pointer; text-align:left; font-family:'Nunito',sans-serif; transition:all 0.2s; }
+  .qopt:hover:not(.disabled) { border-color:rgba(255,255,255,0.25); background:var(--surface); }
+  .qopt.correct { background:rgba(107,203,119,0.2)!important; border-color:#6BCB77!important; color:#6BCB77!important; }
+  .qopt.wrong { background:rgba(255,107,107,0.15)!important; border-color:#FF6B6B!important; color:#FF6B6B!important; }
+  .qopt.disabled { pointer-events:none; }
+  .quiz-fb { margin-top:1.2rem; min-height:1.4rem; font-size:0.88rem; font-weight:700; }
+  .quiz-actions { margin-top:1.5rem; display:flex; justify-content:flex-end; }
+  .qnext { padding:0.75rem 2rem; border-radius:50px; border:none; background:linear-gradient(135deg,var(--c1),var(--c5)); color:#fff; font-size:0.9rem; font-weight:800; font-family:'Nunito',sans-serif; cursor:pointer; display:none; transition:transform 0.2s; }
+  .qnext:hover { transform:translateY(-2px); }
+  .quiz-result { text-align:center; padding:1rem; }
+  .result-score { font-family:'Bebas Neue',sans-serif; font-size:6rem; line-height:1; background:linear-gradient(135deg,var(--c2),var(--c3)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .result-msg { color:var(--muted); font-size:1rem; margin:0.5rem 0 1.8rem; }
+  .retry-btn { padding:0.85rem 2.5rem; border-radius:50px; border:none; background:linear-gradient(135deg,var(--c1),var(--c5)); color:#fff; font-size:0.95rem; font-weight:800; font-family:'Nunito',sans-serif; cursor:pointer; transition:transform 0.2s; }
+  .retry-btn:hover { transform:translateY(-2px); }
+
+  footer { padding:2.5rem; text-align:center; border-top:1px solid rgba(255,255,255,0.06); color:var(--muted); font-size:0.82rem; }
+  .fi { opacity:0; transform:translateY(28px); transition:opacity 0.6s,transform 0.6s; }
+  .fi.on { opacity:1; transform:none; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">FitIQ</div>
+  <ul class="nav-links">
+    <li><a href="#components">Components</a></li>
+    <li><a href="#wheel">Wheel</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-orbs">
+    <div class="orb orb1"></div><div class="orb orb2"></div>
+    <div class="orb orb3"></div><div class="orb orb4"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-tag">Interactive Guide</div>
+    <h1>Components<span class="line2">of Fitness</span></h1>
+    <p class="hero-sub">Discover the 5 essential pillars of physical fitness — what they mean, how to test them, and why they matter for your health.</p>
+    <div class="hero-badges">
+      <span class="badge" style="background:rgba(255,107,107,0.18);color:#FF6B6B;">❤️ Cardiovascular</span>
+      <span class="badge" style="background:rgba(255,217,61,0.18);color:#FFD93D;">💪 Strength</span>
+      <span class="badge" style="background:rgba(107,203,119,0.18);color:#6BCB77;">🔁 Endurance</span>
+      <span class="badge" style="background:rgba(77,150,255,0.18);color:#4D96FF;">🤸 Flexibility</span>
+      <span class="badge" style="background:rgba(199,125,255,0.18);color:#C77DFF;">⚖️ Body Composition</span>
+    </div>
+    <a href="#components" class="cta-btn">Explore Now</a>
+    <div class="scroll-hint">↓ scroll down</div>
+  </div>
+</section>
+
+<section id="components">
+  <div class="sec-label">The Five Pillars</div>
+  <h2 class="sec-title">5 Key Components</h2>
+  <p class="sec-sub">Click any card to expand the full detailed breakdown</p>
+  <div class="cards-wrap" id="cardsWrap"></div>
+</section>
+
+<section id="wheel">
+  <div class="sec-label">Visual Map</div>
+  <h2 class="sec-title">Fitness Wheel</h2>
+  <p class="sec-sub">Click a segment to explore each component</p>
+  <div class="wheel-inner fi">
+    <div class="wheel-svg-wrap">
+      <svg width="320" height="320" viewBox="0 0 320 320" id="wheelSvg"></svg>
+    </div>
+    <div class="wheel-info-box" id="wInfo">
+      <p class="wi-hint">👆 Click any segment on the wheel to see details about that component.</p>
+    </div>
+  </div>
+</section>
+
+<section id="quiz">
+  <div class="sec-label">Test Yourself</div>
+  <h2 class="sec-title">Quick Quiz</h2>
+  <p class="sec-sub">5 questions — how much do you know?</p>
+  <div class="quiz-card fi" id="quizCard"></div>
+</section>
+
+<footer>Components of Fitness — Interactive Reference</footer>
+
+<script>
+const comps = [
+  {
+    num:'01', color:'#FF6B6B', icon:'❤️',
+    name:'Cardiovascular Endurance',
+    tagline:'The heart and lungs\' ability to fuel the body with oxygen during sustained physical activity.',
+    definition:'Cardiovascular endurance — also called aerobic fitness or cardiorespiratory endurance — is the ability of the heart, lungs, and circulatory system to efficiently deliver oxygen and nutrients to working muscles over a prolonged period of physical exertion. It reflects how well your body sustains continuous movement and recovers from exercise. The stronger your cardiovascular system, the longer and harder your body can work without fatigue. It is widely considered the most important component of health-related fitness because it directly impacts overall health and life expectancy.',
+    examples:['Long-distance running', 'Swimming laps', 'Cycling', 'Rowing', 'Jump rope', 'Aerobics classes', 'Playing football or basketball'],
+    howToTest:'The Cooper 12-Minute Run Test is the gold standard — you run as far as possible in 12 minutes and the distance is used to estimate your VO₂ max (maximum oxygen uptake). Other tests include the Beep Test (20m shuttle run) and the Harvard Step Test. VO₂ max is the scientific measure of cardiovascular efficiency — elite athletes can exceed 70 ml/kg/min.',
+    howToImprove:[
+      'Run, cycle or swim at moderate intensity for 30+ minutes, 3–5 times per week',
+      'Try interval training — alternate between high and low intensity bursts',
+      'Gradually increase duration or intensity each week (10% rule)',
+      'Sports like football, basketball and tennis naturally build cardio endurance'
+    ],
+    benefits:[
+      'Strengthens the heart muscle, reducing risk of heart disease and stroke',
+      'Lowers resting blood pressure and bad cholesterol (LDL)',
+      'Improves lung capacity and oxygen efficiency',
+      'Boosts energy levels and reduces fatigue in daily life',
+      'Releases endorphins that reduce stress, anxiety and depression',
+      'Helps manage body weight and reduces risk of Type 2 diabetes'
+    ],
+    fact:'People with high cardiovascular endurance have up to 35% lower risk of dying from heart disease.',
+    factColor:'rgba(255,107,107,0.2)', factText:'#FF6B6B'
+  },
+  {
+    num:'02', color:'#FFD93D', icon:'💪',
+    name:'Muscular Strength',
+    tagline:'The maximum force a muscle or muscle group can produce in a single all-out effort.',
+    definition:'Muscular strength is defined as the maximum amount of force that a muscle or group of muscles can exert against a resistance in a single maximal effort. It represents the peak capacity of your muscles — how hard they can push, pull or lift in one explosive moment. Strength is the foundation upon which power, endurance and many athletic skills are built. It differs from muscular endurance in that strength focuses on maximum force in one attempt, rather than repeated effort over time. Having good muscular strength protects the body\'s joints, improves posture, and supports overall functional movement.',
+    examples:['One-rep max bench press', 'Deadlift', 'Back squat', 'Overhead press', 'Arm wrestling', 'Carrying heavy shopping bags'],
+    howToTest:'The One-Rep Max (1RM) test measures the heaviest weight you can lift for exactly one repetition with correct form. It can be tested on exercises like the bench press, squat or deadlift. Hand grip dynamometer tests are also widely used in schools and clinics because they are safe and quick. A higher 1RM relative to body weight indicates greater muscular strength.',
+    howToImprove:[
+      'Lift heavy weights at low repetitions (1–6 reps per set)',
+      'Focus on compound exercises: squats, deadlifts, bench press, pull-ups',
+      'Allow 2–3 minutes of rest between sets to allow full muscle recovery',
+      'Follow progressive overload — gradually increase weight each week',
+      'Ensure adequate protein intake (1.6–2.2g per kg of body weight) for muscle repair'
+    ],
+    benefits:[
+      'Increases bone density, significantly reducing risk of osteoporosis',
+      'Boosts resting metabolic rate — more muscle burns more calories at rest',
+      'Protects joints and reduces injury risk in everyday and sporting activity',
+      'Improves posture and body alignment',
+      'Enhances athletic performance across virtually all sports',
+      'Supports healthy ageing — muscle mass naturally declines after 30'
+    ],
+    fact:'After age 30, adults lose 3–8% of muscle mass per decade without resistance training.',
+    factColor:'rgba(255,217,61,0.2)', factText:'#FFD93D'
+  },
+  {
+    num:'03', color:'#6BCB77', icon:'🔁',
+    name:'Muscular Endurance',
+    tagline:'The ability of muscles to exert force repeatedly over time without becoming fatigued.',
+    definition:'Muscular endurance is the capacity of a muscle or group of muscles to perform repeated contractions or sustain a contraction for an extended period of time without significant fatigue. While muscular strength is about maximum force in a single effort, muscular endurance is about sustaining effort over many repetitions or a long duration. It is essential for everyday tasks and athletic performance — whether you\'re holding a plank position, cycling for an hour, or completing a set of 30 sit-ups. Good muscular endurance also improves posture, reduces injury risk, and supports functional independence throughout life.',
+    examples:['Completing 50 push-ups', '3-minute plank hold', 'Long-distance rowing', 'Carrying a heavy bag for a long distance', 'Repetitive lifting at work', 'Rock climbing'],
+    howToTest:'The most common tests are the 1-Minute Sit-Up Test and the 1-Minute Push-Up Test, which count how many repetitions can be completed in 60 seconds with correct form. The Flexed Arm Hang Test measures how long you can hold a pull-up position. Schools frequently use these as part of standard fitness assessments.',
+    howToImprove:[
+      'Train with lighter weights at higher repetitions (15–25 reps per set)',
+      'Use bodyweight exercises: push-ups, sit-ups, lunges, planks, squats',
+      'Perform circuit training with minimal rest between exercises',
+      'Incorporate activities like cycling, rowing and swimming',
+      'Gradually increase number of reps or duration each week'
+    ],
+    benefits:[
+      'Improves posture by strengthening core and stabilising muscles',
+      'Reduces risk of repetitive strain injuries and chronic back pain',
+      'Enhances performance in endurance sports like cycling and swimming',
+      'Makes everyday tasks — like climbing stairs or carrying shopping — much easier',
+      'Delays muscle fatigue during physical activity',
+      'Supports long-term musculoskeletal health and independence in older age'
+    ],
+    fact:'A strong core (muscular endurance) reduces lower back pain by up to 40% in adults.',
+    factColor:'rgba(107,203,119,0.2)', factText:'#6BCB77'
+  },
+  {
+    num:'04', color:'#4D96FF', icon:'🤸',
+    name:'Flexibility',
+    tagline:'The range of motion available at a joint, enabling the body to move freely and fluidly.',
+    definition:'Flexibility is the ability of a joint or series of joints to move through their full, unrestricted range of motion (ROM). It depends on the elasticity of muscles, tendons, and ligaments surrounding a joint. Flexibility is highly specific — being flexible in one area (e.g. hamstrings) does not guarantee flexibility elsewhere (e.g. shoulders). It naturally decreases with age and inactivity, which is why regular stretching is vital. Good flexibility is critical for injury prevention, postural balance, athletic performance, and quality of daily movement. There are two main types: static flexibility (holding a stretched position) and dynamic flexibility (moving a joint through its full range during activity).',
+    examples:['Touching your toes with straight legs', 'Full overhead shoulder rotation', 'Deep yoga poses like the pigeon or lotus', 'Doing the splits', 'Ballet and gymnastics movements', 'A goalkeeper diving full stretch'],
+    howToTest:'The Sit-and-Reach Test is the most widely used flexibility test — you slide a ruler forward with both hands while seated and measure how far past your toes you can reach. Goniometers (angle-measuring devices) are used clinically to measure joint range of motion precisely. The Thomas Test and Apley Scratch Test assess hip flexor and shoulder flexibility respectively.',
+    howToImprove:[
+      'Practise static stretching after exercise — hold each stretch for 30–60 seconds',
+      'Try yoga or Pilates regularly — both dramatically improve whole-body flexibility',
+      'Use dynamic stretching as a warm-up before sports (leg swings, arm circles)',
+      'Foam rolling (self-myofascial release) reduces muscle tightness and improves range',
+      'Stretch consistently — flexibility requires daily practice to improve significantly'
+    ],
+    benefits:[
+      'Reduces muscle soreness and stiffness after exercise',
+      'Significantly lowers risk of muscle strains and ligament sprains',
+      'Improves posture by releasing tight hip flexors and chest muscles',
+      'Enhances athletic performance by allowing greater power and range of movement',
+      'Relieves chronic pain, particularly lower back and neck pain',
+      'Improves circulation and supports muscle recovery'
+    ],
+    fact:'Sedentary adults can lose up to 50% of their joint flexibility between ages 30 and 70.',
+    factColor:'rgba(77,150,255,0.2)', factText:'#4D96FF'
+  },
+  {
+    num:'05', color:'#C77DFF', icon:'⚖️',
+    name:'Body Composition',
+    tagline:'The proportion of fat mass versus lean mass that makes up your total body weight.',
+    definition:'Body composition refers to the percentages of fat, muscle, bone, and water that make up the human body. Unlike body weight alone, which tells you very little, body composition gives a detailed picture of your health and physical fitness. Two individuals can weigh exactly the same yet have completely different body compositions — one might have 12% body fat and extensive lean muscle, while the other might carry 30% body fat. The key distinction is between fat mass (adipose tissue, essential and non-essential) and lean mass (muscles, bones, organs, blood, and water). A healthy body composition — lower fat percentage and higher lean mass — is strongly associated with reduced disease risk, better athletic performance, and improved quality of life.',
+    examples:['An athlete and an inactive person weighing 70kg can have very different compositions', 'A bodybuilder with 8% body fat vs average person with 25%', 'Weight loss without exercise can reduce muscle mass (bad composition change)', 'Resistance training can increase weight but dramatically improve composition'],
+    howToTest:'Multiple methods exist with varying accuracy: BMI (Body Mass Index) is quick but doesn\'t distinguish fat from muscle. Skinfold caliper tests pinch subcutaneous fat at multiple sites (bicep, tricep, subscapular, suprailiac). Bioelectrical Impedance Analysis (BIA) sends a harmless current through the body to estimate fat vs lean mass. DEXA scan (Dual-energy X-ray Absorptiometry) is the gold standard — it provides a full scan of bone, fat, and muscle distribution with extreme precision.',
+    howToImprove:[
+      'Combine resistance training (to build lean muscle) with cardio (to burn fat)',
+      'Eat a diet high in lean protein: chicken, fish, eggs, legumes',
+      'Create a modest calorie deficit to reduce fat without losing muscle',
+      'Prioritise sleep — poor sleep increases fat-storing hormones (cortisol, ghrelin)',
+      'Reduce ultra-processed foods, added sugars and alcohol which promote fat storage',
+      'Stay consistently active — even walking 10,000 steps/day improves composition over time'
+    ],
+    benefits:[
+      'Lower body fat % significantly reduces risk of Type 2 diabetes, heart disease and stroke',
+      'Higher muscle mass increases resting metabolic rate — you burn more calories doing nothing',
+      'Improved joint health and mobility with reduced stress on knees and hips',
+      'Better hormonal balance — fat tissue produces oestrogen and inflammatory compounds',
+      'Enhanced athletic performance — more power, speed and endurance per kilogram of body weight',
+      'Improved self-confidence, energy levels and mental health'
+    ],
+    fact:'Healthy body fat ranges are 6–24% for men and 16–30% for women depending on age and fitness level.',
+    factColor:'rgba(199,125,255,0.2)', factText:'#C77DFF'
+  }
+];
+
+const quizQ = [
+  { q:'Which fitness component is measured by VO₂ max and the Cooper 12-minute run test?', opts:['Muscular Strength','Body Composition','Cardiovascular Endurance','Flexibility'], ans:2 },
+  { q:'Muscular strength is best defined as:', opts:['Repeated muscle contractions over time','Maximum force produced in a single effort','Range of motion at a joint','The ratio of fat to lean mass'], ans:1 },
+  { q:'The sit-and-reach test is the standard test for measuring:', opts:['Muscular Endurance','Cardiovascular Endurance','Body Composition','Flexibility'], ans:3 },
+  { q:'Which method is considered the gold standard for measuring body composition?', opts:['BMI calculation','Skinfold calipers','DEXA scan','Bioelectrical Impedance'], ans:2 },
+  { q:'High-rep, low-weight training primarily develops which component?', opts:['Flexibility','Muscular Endurance','Body Composition','Cardiovascular Endurance'], ans:1 }
+];
+
+// BUILD CARDS
+const wrap = document.getElementById('cardsWrap');
+comps.forEach((c, idx) => {
+  const card = document.createElement('div');
+  card.className = 'comp-card fi';
+  card.style.setProperty('--card-color', c.color);
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="card-num">${c.num}</div>
+      <div>
+        <div class="card-name">${c.icon} ${c.name}</div>
+        <div class="card-tagline">${c.tagline}</div>
+      </div>
+      <div class="card-icon-wrap">+</div>
+    </div>
+    <div class="card-body">
+      <div class="card-body-inner">
+
+        <div class="def-block">
+          <h4>📖 Full Definition</h4>
+          <p>${c.definition}</p>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-tile">
+            <h4>🏃 Real-World Examples</h4>
+            <ul>${c.examples.map(e=>`<li>${e}</li>`).join('')}</ul>
+          </div>
+          <div class="info-tile">
+            <h4>📏 How to Test It</h4>
+            <p>${c.howToTest}</p>
+          </div>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-tile">
+            <h4>🏋️ How to Improve</h4>
+            <ul>${c.howToImprove.map(e=>`<li>${e}</li>`).join('')}</ul>
+          </div>
+          <div class="info-tile">
+            <h4>✅ Health Benefits</h4>
+            <ul>${c.benefits.map(e=>`<li>${e}</li>`).join('')}</ul>
+          </div>
+        </div>
+
+        <div class="fact-bar">
+          <div class="fact-pill" style="background:${c.factColor};color:${c.factText};">💡 Did You Know? ${c.fact}</div>
+        </div>
+
+      </div>
+    </div>`;
+  card.querySelector('.card-header').addEventListener('click', () => {
+    const isOpen = card.classList.contains('open');
+    document.querySelectorAll('.comp-card').forEach(x => x.classList.remove('open'));
+    if (!isOpen) card.classList.add('open');
+  });
+  wrap.appendChild(card);
+});
+
+// WHEEL
+const svg = document.getElementById('wheelSvg');
+const cx=160,cy=160,R=148,r=52;
+comps.forEach((c,i)=>{
+  const total=comps.length;
+  const a0=(i/total)*2*Math.PI-Math.PI/2;
+  const a1=((i+1)/total)*2*Math.PI-Math.PI/2;
+  const x1=cx+R*Math.cos(a0),y1=cy+R*Math.sin(a0);
+  const x2=cx+R*Math.cos(a1),y2=cy+R*Math.sin(a1);
+  const ix1=cx+r*Math.cos(a0),iy1=cy+r*Math.sin(a0);
+  const ix2=cx+r*Math.cos(a1),iy2=cy+r*Math.sin(a1);
+  const mid=(a0+a1)/2;
+  const lx=cx+(R*0.68)*Math.cos(mid),ly=cy+(R*0.68)*Math.sin(mid);
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.setAttribute('class','wheel-slice');
+  const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+  path.setAttribute('d',`M ${ix1} ${iy1} L ${x1} ${y1} A ${R} ${R} 0 0 1 ${x2} ${y2} L ${ix2} ${iy2} A ${r} ${r} 0 0 0 ${ix1} ${iy1} Z`);
+  path.setAttribute('fill',c.color); path.setAttribute('stroke','#0d0d16'); path.setAttribute('stroke-width','3');
+  const txt=document.createElementNS('http://www.w3.org/2000/svg','text');
+  txt.setAttribute('x',lx);txt.setAttribute('y',ly);txt.setAttribute('text-anchor','middle');txt.setAttribute('dominant-baseline','middle');
+  txt.setAttribute('font-size','22');txt.setAttribute('fill','#fff');txt.textContent=c.icon;
+  g.appendChild(path);g.appendChild(txt);
+  g.addEventListener('click',()=>{
+    document.querySelectorAll('.wheel-slice').forEach(s=>s.classList.remove('selected'));
+    g.classList.add('selected');
+    document.getElementById('wInfo').innerHTML=`
+      <div class="wi-num" style="color:${c.color}">${c.num}</div>
+      <div class="wi-name">${c.name}</div>
+      <div class="wi-desc">${c.tagline}</div>
+      <div class="wi-desc" style="margin-top:0.5rem;font-size:0.82rem;">${c.definition.substring(0,200)}...</div>
+      <div class="wi-fact" style="margin-top:1rem;background:${c.factColor};color:${c.factText};">💡 ${c.fact}</div>`;
+  });
+  svg.appendChild(g);
+});
+const ct=document.createElementNS('http://www.w3.org/2000/svg','text');
+ct.setAttribute('x',160);ct.setAttribute('y',156);ct.setAttribute('text-anchor','middle');ct.setAttribute('dominant-baseline','middle');
+ct.setAttribute('font-size','11');ct.setAttribute('fill','#9896b8');ct.setAttribute('font-family','Nunito,sans-serif');ct.setAttribute('font-weight','700');
+ct.textContent='FITNESS';svg.appendChild(ct);
+
+// QUIZ
+let qi=0,sc=0;
+function renderQ(){
+  const box=document.getElementById('quizCard');
+  if(qi>=quizQ.length){
+    box.innerHTML=`<div class="quiz-result">
+      <div class="result-score">${sc}/${quizQ.length}</div>
+      <div class="result-msg">${sc>=4?'🎉 Outstanding! You really know your fitness!':sc>=2?'👍 Good work! Review the cards above to improve.':'📖 Keep studying — revisit the 5 components!'}</div>
+      <button class="retry-btn" onclick="qi=0;sc=0;renderQ()">Try Again</button>
+    </div>`;return;
+  }
+  const q=quizQ[qi];
+  const pct=Math.round((qi/quizQ.length)*100);
+  box.innerHTML=`
+    <div class="quiz-top">
+      <div class="quiz-qnum">Q${qi+1} / ${quizQ.length}</div>
+      <div class="quiz-bar"><div class="quiz-bar-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="quiz-q">${q.q}</div>
+    <div class="quiz-opts">${q.opts.map((o,i)=>`<button class="qopt" data-i="${i}">${o}</button>`).join('')}</div>
+    <div class="quiz-fb" id="qfb"></div>
+    <div class="quiz-actions"><button class="qnext" id="qnext" onclick="qi++;renderQ()">Next →</button></div>`;
+  document.querySelectorAll('.qopt').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      const ch=parseInt(this.dataset.i);
+      document.querySelectorAll('.qopt').forEach(b=>b.classList.add('disabled'));
+      if(ch===q.ans){
+        this.classList.add('correct');
+        document.getElementById('qfb').textContent='✓ Correct!';
+        document.getElementById('qfb').style.color='#6BCB77'; sc++;
+      } else {
+        this.classList.add('wrong');
+        document.querySelectorAll('.qopt')[q.ans].classList.add('correct');
+        document.getElementById('qfb').textContent='✗ Incorrect — correct answer highlighted.';
+        document.getElementById('qfb').style.color='#FF6B6B';
+      }
+      document.getElementById('qnext').style.display='inline-block';
+    });
+  });
+}
+renderQ();
+
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on');});},{threshold:0.1});
+document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
