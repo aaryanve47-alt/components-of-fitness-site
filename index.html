@@ -3,496 +3,913 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Components of Fitness</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<title>FitIQ — Components of Fitness</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --c1: #FF6B6B; --c2: #FFD93D; --c3: #6BCB77; --c4: #4D96FF; --c5: #C77DFF;
-    --bg: #0d0d16; --surface: #16162a; --surface2: #1e1e35; --text: #f5f4ff; --muted: #9896b8;
-  }
-  html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text); font-family: 'Nunito', sans-serif; overflow-x: hidden; }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --red:#E63946;--red2:#c1121f;--redL:#ff6b6b;
+  --bg:#ffffff;--surface:#fff5f5;--surface2:#ffe8e8;
+  --text:#1a0a0a;--muted:#8a4a4a;--border:rgba(230,57,70,0.15);
+  --shadow:rgba(230,57,70,0.1);
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;overflow-x:hidden;}
 
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-    padding: 1rem 3rem; display: flex; justify-content: space-between; align-items: center;
-    background: rgba(13,13,22,0.88); backdrop-filter: blur(14px);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-  .logo {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 3px;
-    background: linear-gradient(135deg, var(--c1), var(--c5));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--text); }
+/* FLOATING BACKGROUND */
+.bg-floats{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.bf{position:absolute;font-size:1rem;opacity:0.06;animation:bfloat linear infinite;}
+@keyframes bfloat{0%{transform:translateY(100vh) rotate(0deg);opacity:0}10%{opacity:0.06}90%{opacity:0.06}100%{transform:translateY(-60px) rotate(15deg);opacity:0}}
 
-  .hero {
-    min-height: 100vh; display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
-    text-align: center; padding: 8rem 2rem 5rem; position: relative; overflow: hidden;
-  }
-  .hero-orbs { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-  .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; animation: float 8s ease-in-out infinite alternate; }
-  .orb1 { width: 420px; height: 420px; background: var(--c1); top: -100px; left: -120px; }
-  .orb2 { width: 380px; height: 380px; background: var(--c4); top: -80px; right: -100px; animation-delay: -2s; }
-  .orb3 { width: 300px; height: 300px; background: var(--c5); bottom: 0; left: 30%; animation-delay: -4s; }
-  .orb4 { width: 260px; height: 260px; background: var(--c3); bottom: 50px; right: -60px; animation-delay: -6s; }
-  @keyframes float { 0%{transform:translateY(0) scale(1)} 100%{transform:translateY(-40px) scale(1.06)} }
+/* LOADER */
+.loader{position:fixed;inset:0;background:#fff;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.5s,visibility 0.5s;}
+.loader.gone{opacity:0;visibility:hidden;pointer-events:none;}
+.ld-logo{font-family:'Bebas Neue',sans-serif;font-size:4rem;letter-spacing:4px;color:var(--red);animation:ldpulse 0.7s ease infinite alternate;}
+.ld-sub{font-size:0.8rem;font-weight:800;letter-spacing:3px;color:var(--muted);margin-top:0.4rem;text-transform:uppercase;}
+.ld-dots{display:flex;gap:0.6rem;margin-top:1.5rem;}
+.ld-dot{width:11px;height:11px;border-radius:50%;background:var(--red);animation:ldbounce 0.8s ease infinite alternate;}
+.ld-dot:nth-child(2){animation-delay:0.2s;}
+.ld-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes ldpulse{from{transform:scale(1)}to{transform:scale(1.06)}}
+@keyframes ldbounce{from{transform:translateY(0)}to{transform:translateY(-14px)}}
 
-  .hero-content { position: relative; z-index: 1; max-width: 820px; }
-  .hero-tag { display: inline-block; margin-bottom: 1.5rem; padding: 0.4rem 1.2rem; border: 1px solid rgba(255,255,255,0.18); border-radius: 50px; font-size: 0.78rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
-  .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5rem, 14vw, 10rem); line-height: 0.9; letter-spacing: 3px; margin-bottom: 1.5rem; }
-  .hero h1 .line2 { background: linear-gradient(90deg, var(--c1) 0%, var(--c2) 30%, var(--c3) 55%, var(--c4) 80%, var(--c5) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: block; }
-  .hero-sub { font-size: 1.05rem; color: var(--muted); line-height: 1.8; max-width: 520px; margin: 0 auto 2.5rem; }
-  .hero-badges { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2.5rem; }
-  .badge { padding: 0.45rem 1.1rem; border-radius: 50px; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.5px; }
-  .cta-btn { display: inline-block; padding: 1rem 3rem; border-radius: 50px; font-weight: 800; font-size: 1rem; text-decoration: none; letter-spacing: 0.5px; background: linear-gradient(135deg, var(--c1), var(--c5)); color: #fff; transition: transform 0.25s, box-shadow 0.25s; box-shadow: 0 8px 30px rgba(255,107,107,0.35); }
-  .cta-btn:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(255,107,107,0.5); }
-  .scroll-hint { margin-top: 3.5rem; color: var(--muted); font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; animation: bounce 2.2s infinite; }
-  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(7px)} }
+/* SCROLL BAR */
+.scroll-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--red),var(--redL));z-index:9000;width:0%;transition:width 0.1s;}
 
-  #components { padding: 6rem 2rem; }
-  .sec-label { text-align: center; font-size: 0.75rem; font-weight: 800; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 0.6rem; background: linear-gradient(90deg, var(--c1), var(--c5)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .sec-title { text-align: center; font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem, 7vw, 5rem); letter-spacing: 2px; margin-bottom: 0.4rem; }
-  .sec-sub { text-align: center; color: var(--muted); font-size: 0.95rem; margin-bottom: 4rem; }
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:0.9rem 2.5rem;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.94);backdrop-filter:blur(18px);border-bottom:2px solid var(--border);transition:all 0.3s;}
+nav.up{box-shadow:0 4px 18px var(--shadow);}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;letter-spacing:3px;color:var(--red);cursor:pointer;transition:transform 0.2s;}
+.logo:hover{transform:scale(1.06);}
+.logo em{color:var(--text);font-style:normal;}
+.navlinks{display:flex;gap:0.2rem;list-style:none;}
+.navlinks a{color:var(--muted);text-decoration:none;font-size:0.8rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:0.45rem 0.9rem;border-radius:50px;transition:all 0.2s;cursor:pointer;}
+.navlinks a:hover,.navlinks a.on{color:#fff;background:var(--red);}
 
-  .cards-wrap { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 1.8rem; }
+/* PAGES */
+.page{display:none;min-height:100vh;position:relative;z-index:1;animation:pgIn 0.4s ease;}
+.page.active{display:block;}
+@keyframes pgIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
-  .comp-card {
-    background: var(--surface); border-radius: 24px;
-    border: 1.5px solid rgba(255,255,255,0.07);
-    cursor: pointer; overflow: hidden;
-    transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
-    position: relative;
-  }
-  .comp-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:6px; background:var(--card-color); transition:width 0.3s; }
-  .comp-card:hover { border-color: var(--card-color); transform: translateX(4px); }
-  .comp-card:hover::before { width:10px; }
-  .comp-card.open { border-color: var(--card-color); box-shadow: 0 16px 50px rgba(0,0,0,0.5); }
-  .comp-card.open::before { width: 10px; }
+/* === HOME === */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:8rem 2rem 5rem;position:relative;}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;margin-bottom:1.5rem;padding:0.4rem 1.2rem;border:2px solid var(--border);border-radius:50px;font-size:0.72rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--red);background:var(--surface);}
+.hblink{width:7px;height:7px;border-radius:50%;background:var(--red);animation:hblink 1.2s infinite;}
+@keyframes hblink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.2;transform:scale(0.6)}}
+.hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,13vw,9rem);line-height:0.88;letter-spacing:2px;margin-bottom:1.5rem;}
+.h1l1{display:block;color:var(--text);}
+.h1l2{display:block;color:var(--red);position:relative;}
+.h1l2::after{content:'💪';font-size:0.45em;position:absolute;top:-5px;right:-8px;animation:wig 1.8s ease infinite;}
+@keyframes wig{0%,100%{transform:rotate(-12deg) scale(1)}50%{transform:rotate(12deg) scale(1.1)}}
+.hero-sub{font-size:0.98rem;color:var(--muted);line-height:1.8;max-width:480px;margin:0 auto 2.5rem;}
+.hero-stats{display:flex;gap:3rem;justify-content:center;margin-bottom:3rem;}
+.stat{text-align:center;}
+.stat-n{font-family:'Bebas Neue',sans-serif;font-size:3rem;line-height:1;color:var(--red);}
+.stat-l{font-size:0.7rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.btn-r{padding:0.9rem 2.4rem;border-radius:50px;font-weight:800;font-size:0.9rem;border:none;cursor:pointer;background:var(--red);color:#fff;transition:all 0.25s;font-family:'Nunito',sans-serif;box-shadow:0 6px 18px rgba(230,57,70,0.35);}
+.btn-r:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(230,57,70,0.45);}
+.btn-o{padding:0.9rem 2.4rem;border-radius:50px;font-weight:800;font-size:0.9rem;cursor:pointer;background:transparent;color:var(--red);border:2px solid var(--red);transition:all 0.25s;font-family:'Nunito',sans-serif;}
+.btn-o:hover{background:var(--surface);transform:translateY(-3px);}
 
-  .card-header { display: grid; grid-template-columns: 80px 1fr auto; align-items: center; gap: 1.5rem; padding: 1.8rem 2rem 1.8rem 2.5rem; }
-  .card-num { font-family:'Bebas Neue',sans-serif; font-size:3.5rem; line-height:1; color:var(--card-color); text-align:center; }
-  .card-name { font-family:'Bebas Neue',sans-serif; font-size:1.7rem; letter-spacing:1px; margin-bottom:0.35rem; }
-  .card-tagline { color:var(--muted); font-size:0.9rem; line-height:1.6; }
-  .card-icon-wrap { width:36px; height:36px; border-radius:50%; border:1.5px solid rgba(255,255,255,0.15); display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:1.1rem; font-weight:700; transition:transform 0.3s,background 0.3s,border-color 0.3s; flex-shrink:0; }
-  .comp-card.open .card-icon-wrap { transform:rotate(45deg); background:var(--card-color); border-color:transparent; color:#fff; }
+@keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 
-  .card-body { max-height:0; overflow:hidden; transition:max-height 0.6s ease; }
-  .comp-card.open .card-body { max-height:1200px; }
+/* FEATURE CARDS */
+.features{padding:4rem 2rem;max-width:920px;margin:0 auto;}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:1rem;}
+.fc{background:var(--surface);border:2px solid var(--border);border-radius:18px;padding:1.8rem;text-align:center;cursor:pointer;transition:all 0.3s;}
+.fc:hover{transform:translateY(-6px);border-color:var(--red);box-shadow:0 14px 36px var(--shadow);}
+.fc-icon{font-size:2rem;margin-bottom:0.8rem;display:block;}
+.fc-name{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:1px;color:var(--red);margin-bottom:0.3rem;}
+.fc-desc{font-size:0.78rem;color:var(--muted);line-height:1.6;}
 
-  .card-body-inner { padding: 0 2rem 2rem 2.5rem; border-top:1px solid rgba(255,255,255,0.07); padding-top:1.8rem; margin-left:80px; }
+/* SECTION HEADER */
+.sh{text-align:center;padding:8rem 2rem 2.5rem;}
+.sh-label{font-size:0.7rem;font-weight:800;letter-spacing:5px;text-transform:uppercase;color:var(--red);margin-bottom:0.5rem;}
+.sh-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.5rem,6vw,4.5rem);letter-spacing:2px;color:var(--text);}
+.sh-sub{color:var(--muted);font-size:0.9rem;margin-top:0.4rem;}
 
-  /* DEFINITION BLOCK */
-  .def-block { background:var(--surface2); border-radius:16px; padding:1.5rem; margin-bottom:1.5rem; border-left:4px solid var(--card-color); }
-  .def-block h4 { font-size:0.7rem; font-weight:800; letter-spacing:3px; text-transform:uppercase; color:var(--card-color); margin-bottom:0.6rem; }
-  .def-block p { font-size:0.95rem; line-height:1.8; color:var(--text); }
+/* === LEARN === */
+.comp-list{max-width:840px;margin:0 auto;padding:0 2rem 4rem;display:flex;flex-direction:column;gap:1.2rem;}
+.cc{background:#fff;border-radius:20px;border:2px solid var(--border);overflow:hidden;transition:all 0.3s;position:relative;box-shadow:0 2px 10px var(--shadow);}
+.cc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--red);transition:width 0.3s;}
+.cc:hover{border-color:var(--red);transform:translateX(4px);}
+.cc.open{border-color:var(--red);box-shadow:0 8px 26px var(--shadow);}
+.cc.open::before{width:9px;}
+.cc-hdr{display:grid;grid-template-columns:58px 1fr auto;gap:1.2rem;align-items:center;padding:1.3rem 1.5rem;cursor:pointer;}
+.cc-num{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;line-height:1;color:var(--red);text-align:center;}
+.cc-name{font-family:'Bebas Neue',sans-serif;font-size:1.45rem;letter-spacing:1px;color:var(--text);margin-bottom:0.2rem;}
+.cc-tag{color:var(--muted);font-size:0.82rem;line-height:1.5;}
+.cc-tog{width:30px;height:30px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:1rem;transition:all 0.3s;flex-shrink:0;}
+.cc.open .cc-tog{transform:rotate(45deg);background:var(--red);border-color:var(--red);color:#fff;}
+.cc-body{max-height:0;overflow:hidden;transition:max-height 0.55s ease;}
+.cc.open .cc-body{max-height:900px;}
+.cc-inner{padding:0 1.5rem 1.5rem;border-top:2px solid var(--border);}
+.tabs{display:flex;gap:0.4rem;padding:0.9rem 0 1.1rem;flex-wrap:wrap;}
+.tab{padding:0.38rem 0.9rem;border-radius:50px;border:2px solid var(--border);background:transparent;color:var(--muted);font-size:0.73rem;font-weight:800;cursor:pointer;transition:all 0.2s;font-family:'Nunito',sans-serif;}
+.tab.on{background:var(--red);border-color:var(--red);color:#fff;}
+.tc{display:none;}
+.tc.on{display:block;animation:pgIn 0.3s ease;}
+.defb{background:var(--surface);border-radius:12px;padding:1.1rem;margin-bottom:0.9rem;border-left:4px solid var(--red);}
+.defb h4{font-size:0.62rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:0.4rem;}
+.defb p{font-size:0.88rem;line-height:1.8;color:var(--text);}
+.ig{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:0.8rem;margin-bottom:0.9rem;}
+.it{background:var(--surface);border-radius:11px;padding:0.9rem;}
+.it h4{font-size:0.62rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:0.4rem;}
+.it ul{padding-left:1rem;font-size:0.84rem;line-height:1.7;color:var(--muted);}
+.it p{font-size:0.84rem;line-height:1.7;color:var(--muted);}
+.fpill{display:inline-flex;align-items:center;gap:0.4rem;padding:0.45rem 1rem;border-radius:50px;font-size:0.78rem;font-weight:700;background:rgba(230,57,70,0.08);color:var(--red);margin-top:0.4rem;}
+.pb{margin-bottom:0.85rem;}
+.pb-lbl{display:flex;justify-content:space-between;font-size:0.78rem;font-weight:800;margin-bottom:0.3rem;color:var(--muted);}
+.pb-lbl span:last-child{color:var(--red);}
+.pb-track{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;}
+.pb-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--red2),var(--redL));width:0%;transition:width 1s ease;}
 
-  /* SECTION GRID */
-  .info-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:1rem; margin-bottom:1.5rem; }
-  .info-tile { background:var(--surface2); border-radius:14px; padding:1.2rem 1.3rem; }
-  .info-tile h4 { font-size:0.68rem; font-weight:800; letter-spacing:2.5px; text-transform:uppercase; color:var(--card-color); margin-bottom:0.6rem; }
-  .info-tile p, .info-tile ul { font-size:0.88rem; line-height:1.75; color:var(--muted); }
-  .info-tile ul { padding-left:1.1rem; }
-  .info-tile ul li { margin-bottom:0.3rem; }
+/* === QUIZ === */
+.qz-wrap{max-width:640px;margin:0 auto;padding:0 2rem 4rem;}
+.qz-modes{display:grid;grid-template-columns:repeat(3,1fr);gap:0.9rem;margin-bottom:2rem;}
+.qm{background:#fff;border:2px solid var(--border);border-radius:16px;padding:1.2rem;text-align:center;cursor:pointer;transition:all 0.25s;}
+.qm:hover,.qm.sel{border-color:var(--red);background:var(--surface);transform:translateY(-3px);}
+.qm-ico{font-size:1.8rem;margin-bottom:0.4rem;}
+.qm-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1px;color:var(--text);}
+.qm-desc{font-size:0.72rem;color:var(--muted);}
+.qcard{background:#fff;border-radius:20px;padding:2rem;border:2px solid var(--border);box-shadow:0 4px 18px var(--shadow);position:relative;overflow:hidden;}
+.qcard::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--red),var(--redL));}
+.qtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.4rem;}
+.qqnum{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:2px;color:var(--muted);}
+.qbar{flex:1;margin:0 1rem;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;}
+.qbar-f{height:100%;border-radius:3px;background:var(--red);transition:width 0.4s ease;}
+.qtimer{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--red);}
+.qtimer.hot{animation:tpulse 0.4s ease infinite alternate;}
+@keyframes tpulse{from{transform:scale(1)}to{transform:scale(1.2)}}
+.qq{font-size:1.02rem;font-weight:700;line-height:1.65;margin-bottom:1.5rem;color:var(--text);}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;}
+.qo{padding:0.8rem 1rem;border-radius:12px;background:var(--surface);border:2px solid var(--border);color:var(--text);font-size:0.84rem;font-weight:700;cursor:pointer;text-align:left;font-family:'Nunito',sans-serif;transition:all 0.2s;display:flex;align-items:center;gap:0.55rem;}
+.qo:hover:not(.dis){border-color:var(--red);background:#fff;transform:translateY(-2px);}
+.qo-l{width:24px;height:24px;border-radius:7px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:900;flex-shrink:0;color:var(--red);}
+.qo.ok{background:rgba(76,175,80,0.1)!important;border-color:#4CAF50!important;color:#2e7d32!important;}
+.qo.ok .qo-l{background:#4CAF50;color:#fff;}
+.qo.no{background:rgba(230,57,70,0.08)!important;border-color:var(--red)!important;color:var(--red)!important;}
+.qo.dis{pointer-events:none;opacity:0.85;}
+.qfb{margin-top:0.9rem;font-size:0.86rem;font-weight:700;padding:0.65rem 1rem;border-radius:10px;display:none;}
+.qfb.vis{display:block;animation:pgIn 0.3s ease;}
+.qfb.ok{background:rgba(76,175,80,0.09);color:#2e7d32;border:1px solid rgba(76,175,80,0.2);}
+.qfb.no{background:rgba(230,57,70,0.07);color:var(--red);border:1px solid var(--border);}
+.qactions{margin-top:1.1rem;display:flex;justify-content:flex-end;}
+.qnxt{padding:0.65rem 1.7rem;border-radius:50px;border:none;background:var(--red);color:#fff;font-size:0.86rem;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;display:none;transition:all 0.2s;}
+.qnxt:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(230,57,70,0.3);}
+.qresult{text-align:center;padding:1.5rem 0.5rem;}
+.re-em{font-size:3.8rem;display:block;margin-bottom:0.8rem;animation:bounceIn 0.6s ease;}
+@keyframes bounceIn{0%{transform:scale(0)}80%{transform:scale(1.2)}100%{transform:scale(1)}}
+.re-sc{font-family:'Bebas Neue',sans-serif;font-size:5rem;line-height:1;color:var(--red);}
+.re-msg{color:var(--muted);font-size:0.92rem;margin:0.4rem 0 1.4rem;}
+.re-stats{display:flex;gap:2rem;justify-content:center;margin-bottom:1.4rem;}
+.rs{text-align:center;}
+.rs-n{font-family:'Bebas Neue',sans-serif;font-size:1.9rem;color:var(--red);}
+.rs-l{font-size:0.68rem;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.re-btns{display:flex;gap:0.8rem;justify-content:center;}
 
-  /* EXAMPLES ROW */
-  .examples-row { display:flex; flex-wrap:wrap; gap:0.6rem; margin-bottom:1.5rem; }
-  .ex-chip { padding:0.45rem 1rem; border-radius:50px; font-size:0.8rem; font-weight:700; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); color:var(--text); }
+/* OVERALL PROGRESS BAR */
+.overall-prog{background:#fff;border:2px solid var(--border);border-radius:14px;padding:1.1rem 1.3rem;margin-bottom:1.8rem;}
+.op-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;}
+.op-lbl{font-size:0.75rem;font-weight:800;color:var(--text);}
+.op-val{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--red);}
+.op-track{height:14px;background:var(--surface2);border-radius:7px;overflow:hidden;margin-bottom:0.4rem;}
+.op-fill{height:100%;border-radius:7px;background:linear-gradient(90deg,var(--red2),var(--redL));transition:width 0.6s ease;box-shadow:0 0 8px rgba(230,57,70,0.4);width:0%;}
+.op-milestones{display:flex;justify-content:space-between;font-size:0.6rem;font-weight:800;color:var(--muted);}
 
-  /* FACT BAR */
-  .fact-bar { display:flex; gap:1rem; flex-wrap:wrap; }
-  .fact-pill { padding:0.5rem 1.1rem; border-radius:50px; font-size:0.78rem; font-weight:800; }
+/* === TRACKER === */
+.tr-wrap{max-width:880px;margin:0 auto;padding:0 2rem 4rem;}
 
-  /* WHEEL */
-  #wheel { padding: 6rem 2rem; background: var(--surface); }
-  .wheel-inner { max-width:800px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; }
-  @media(max-width:650px){ .wheel-inner{grid-template-columns:1fr;} }
-  .wheel-svg-wrap { display:flex; justify-content:center; }
-  .wheel-info-box { background:var(--surface2); border-radius:20px; padding:2rem; border:1px solid rgba(255,255,255,0.07); min-height:240px; display:flex; flex-direction:column; justify-content:center; }
-  .wi-num { font-family:'Bebas Neue',sans-serif; font-size:3.5rem; line-height:1; margin-bottom:0.3rem; }
-  .wi-name { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:1px; margin-bottom:0.7rem; }
-  .wi-desc { color:var(--muted); font-size:0.88rem; line-height:1.7; margin-bottom:0.8rem; }
-  .wi-fact { font-size:0.8rem; font-weight:700; padding:0.4rem 1rem; border-radius:50px; display:inline-block; }
-  .wi-hint { color:var(--muted); font-size:0.85rem; font-style:italic; }
-  .wheel-slice { cursor:pointer; }
-  .wheel-slice path { transition:opacity 0.2s; }
-  .wheel-slice:hover path { opacity:0.78; }
-  .wheel-slice.selected path { filter:brightness(1.3); }
+/* DIGITAL BOARD */
+.dboard{background:#1a0a0a;border-radius:20px;padding:1.4rem 1.5rem 1.5rem;margin-bottom:1.8rem;border:3px solid var(--red);position:relative;}
+.dboard::before{content:'⬛ LIVE FITNESS DASHBOARD ⬛';position:absolute;top:7px;left:50%;transform:translateX(-50%);font-size:0.55rem;font-weight:800;letter-spacing:3px;color:rgba(255,80,80,0.35);white-space:nowrap;}
+.dboard-scanline{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,0,0,0.025) 2px,rgba(255,0,0,0.025) 4px);border-radius:20px;pointer-events:none;}
+.db-row{display:grid;grid-template-columns:repeat(5,1fr);gap:0.6rem;margin-top:0.5rem;}
+.db-cell{text-align:center;padding:0.7rem 0.3rem;}
+.db-ico{font-size:1.3rem;margin-bottom:0.3rem;display:block;}
+.db-lbl{font-size:0.55rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,140,140,0.55);margin-bottom:0.4rem;}
+.db-num{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;line-height:1;color:#ff3333;text-shadow:0 0 8px rgba(255,51,51,0.7),0 0 18px rgba(255,51,51,0.3);letter-spacing:3px;transition:all 0.2s;}
+.db-num.flash{animation:dbflash 0.25s ease;}
+@keyframes dbflash{0%,100%{color:#ff3333}50%{color:#ff9999;text-shadow:0 0 20px rgba(255,100,100,1)}}
+.db-unt{font-size:0.6rem;color:rgba(255,100,100,0.4);font-weight:700;}
+.db-prog{height:3px;background:rgba(255,255,255,0.07);border-radius:2px;margin-top:0.5rem;overflow:hidden;}
+.db-prog-f{height:100%;border-radius:2px;background:var(--red);box-shadow:0 0 5px rgba(255,51,51,0.7);transition:width 0.5s ease;}
 
-  /* QUIZ */
-  #quiz { padding: 6rem 2rem; }
-  .quiz-card { max-width:680px; margin:0 auto; background:var(--surface); border-radius:24px; padding:2.5rem; border:1px solid rgba(255,255,255,0.08); }
-  .quiz-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.8rem; }
-  .quiz-qnum { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:2px; color:var(--muted); }
-  .quiz-bar { flex:1; margin:0 1rem; height:4px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden; }
-  .quiz-bar-fill { height:100%; border-radius:2px; background:linear-gradient(90deg,var(--c1),var(--c5)); transition:width 0.4s; }
-  .quiz-q { font-size:1.08rem; font-weight:700; line-height:1.65; margin-bottom:1.8rem; }
-  .quiz-opts { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
-  .qopt { padding:0.9rem 1.1rem; border-radius:12px; background:var(--surface2); border:1.5px solid rgba(255,255,255,0.07); color:var(--text); font-size:0.88rem; font-weight:600; cursor:pointer; text-align:left; font-family:'Nunito',sans-serif; transition:all 0.2s; }
-  .qopt:hover:not(.disabled) { border-color:rgba(255,255,255,0.25); background:var(--surface); }
-  .qopt.correct { background:rgba(107,203,119,0.2)!important; border-color:#6BCB77!important; color:#6BCB77!important; }
-  .qopt.wrong { background:rgba(255,107,107,0.15)!important; border-color:#FF6B6B!important; color:#FF6B6B!important; }
-  .qopt.disabled { pointer-events:none; }
-  .quiz-fb { margin-top:1.2rem; min-height:1.4rem; font-size:0.88rem; font-weight:700; }
-  .quiz-actions { margin-top:1.5rem; display:flex; justify-content:flex-end; }
-  .qnext { padding:0.75rem 2rem; border-radius:50px; border:none; background:linear-gradient(135deg,var(--c1),var(--c5)); color:#fff; font-size:0.9rem; font-weight:800; font-family:'Nunito',sans-serif; cursor:pointer; display:none; transition:transform 0.2s; }
-  .qnext:hover { transform:translateY(-2px); }
-  .quiz-result { text-align:center; padding:1rem; }
-  .result-score { font-family:'Bebas Neue',sans-serif; font-size:6rem; line-height:1; background:linear-gradient(135deg,var(--c2),var(--c3)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-  .result-msg { color:var(--muted); font-size:1rem; margin:0.5rem 0 1.8rem; }
-  .retry-btn { padding:0.85rem 2.5rem; border-radius:50px; border:none; background:linear-gradient(135deg,var(--c1),var(--c5)); color:#fff; font-size:0.95rem; font-weight:800; font-family:'Nunito',sans-serif; cursor:pointer; transition:transform 0.2s; }
-  .retry-btn:hover { transform:translateY(-2px); }
+/* SUMMARY STRIP */
+.sum-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0.9rem;margin-bottom:1.8rem;}
+.sum-card{background:#fff;border:2px solid var(--border);border-radius:14px;padding:1.1rem;text-align:center;}
+.sum-n{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--red);line-height:1;}
+.sum-l{font-size:0.65rem;font-weight:800;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
 
-  footer { padding:2.5rem; text-align:center; border-top:1px solid rgba(255,255,255,0.06); color:var(--muted); font-size:0.82rem; }
-  .fi { opacity:0; transform:translateY(28px); transition:opacity 0.6s,transform 0.6s; }
-  .fi.on { opacity:1; transform:none; }
+/* TRACKER CARDS */
+.tr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem;margin-bottom:1.8rem;}
+.trc{background:#fff;border:2px solid var(--border);border-radius:18px;padding:1.3rem;position:relative;overflow:hidden;transition:all 0.25s;}
+.trc:hover{border-color:var(--red);box-shadow:0 6px 22px var(--shadow);}
+.trc::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--red);}
+.trc-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem;}
+.trc-ico{font-size:1.6rem;}
+.trc-goal{font-size:0.65rem;font-weight:800;padding:0.2rem 0.65rem;border-radius:50px;background:var(--surface);color:var(--red);border:1px solid var(--border);}
+.trc-name{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:1px;color:var(--text);margin-bottom:0.7rem;}
+
+/* RING */
+.ring-w{position:relative;width:78px;height:78px;margin:0 auto 1rem;}
+.ring-w svg{transform:rotate(-90deg);}
+.r-bg{fill:none;stroke:var(--surface2);stroke-width:7;}
+.r-fill{fill:none;stroke:var(--red);stroke-width:7;stroke-linecap:round;stroke-dasharray:201;stroke-dashoffset:201;transition:stroke-dashoffset 0.7s ease;}
+.r-txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.r-val{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;line-height:1;color:var(--red);}
+.r-unt{font-size:0.55rem;color:var(--muted);font-weight:800;}
+
+.trc-ctrl{display:flex;align-items:center;gap:0.45rem;}
+.tbtn{width:30px;height:30px;border-radius:9px;border:2px solid var(--border);background:var(--surface);color:var(--red);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:900;font-family:'Nunito',sans-serif;transition:all 0.2s;}
+.tbtn:hover{background:var(--red);color:#fff;border-color:var(--red);}
+.tinp{flex:1;background:var(--surface);border:2px solid var(--border);border-radius:9px;padding:0.4rem;color:var(--text);font-size:0.9rem;font-weight:800;font-family:'Nunito',sans-serif;text-align:center;transition:border-color 0.2s;}
+.tinp:focus{outline:none;border-color:var(--red);}
+
+/* WEEK CHART */
+.wchart-box{background:#fff;border:2px solid var(--border);border-radius:18px;padding:1.5rem;margin-bottom:1.8rem;}
+.wchart-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;}
+.wchart-title{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:1px;color:var(--text);}
+.wchart-leg{font-size:0.7rem;color:var(--muted);font-weight:700;}
+.bar-chart{display:flex;align-items:flex-end;gap:0.5rem;height:110px;}
+.bcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.3rem;height:100%;}
+.barea{flex:1;display:flex;flex-direction:column;justify-content:flex-end;width:100%;}
+.bfill{border-radius:5px 5px 0 0;background:linear-gradient(180deg,var(--redL),var(--red));min-height:3px;width:100%;transition:height 0.7s ease;}
+.bfill.today{background:linear-gradient(180deg,#ff9966,var(--red));box-shadow:0 0 8px rgba(230,57,70,0.25);}
+.bday{font-size:0.65rem;font-weight:800;color:var(--muted);text-transform:uppercase;}
+.bnum{font-size:0.68rem;font-weight:800;color:var(--text);}
+
+/* TIPS */
+.tips-box{background:#fff;border:2px solid var(--border);border-radius:18px;padding:1.5rem;margin-bottom:1.5rem;}
+.tips-title{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:1px;margin-bottom:0.9rem;}
+.tip{display:flex;gap:0.7rem;padding:0.75rem;background:var(--surface);border-radius:10px;margin-bottom:0.55rem;align-items:flex-start;transition:background 0.2s;}
+.tip:hover{background:var(--surface2);}
+.tip-ico{font-size:1.1rem;flex-shrink:0;margin-top:2px;}
+.tip strong{display:block;font-size:0.8rem;color:var(--text);margin-bottom:0.1rem;}
+.tip span{font-size:0.77rem;color:var(--muted);line-height:1.55;}
+
+.tr-actions{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn-ghost{padding:0.65rem 1.5rem;border-radius:50px;border:2px solid var(--border);background:transparent;color:var(--muted);font-size:0.8rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.2s;}
+.btn-ghost:hover{border-color:var(--red);color:var(--red);}
+
+/* === WHEEL === */
+.wh-wrap{max-width:980px;margin:0 auto;padding:0 2rem 4rem;}
+.wh-lay{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:start;margin-bottom:2.5rem;}
+@media(max-width:660px){.wh-lay{grid-template-columns:1fr;}}
+.wh-svg{display:flex;justify-content:center;}
+.wh-info{background:#fff;border:2px solid var(--border);border-radius:20px;padding:1.8rem;min-height:260px;display:flex;flex-direction:column;justify-content:center;box-shadow:0 4px 14px var(--shadow);transition:border-color 0.3s;}
+.wi-num{font-family:'Bebas Neue',sans-serif;font-size:3.2rem;line-height:1;color:var(--red);}
+.wi-name{font-family:'Bebas Neue',sans-serif;font-size:1.45rem;letter-spacing:1px;margin-bottom:0.6rem;}
+.wi-desc{color:var(--muted);font-size:0.86rem;line-height:1.7;margin-bottom:0.9rem;}
+.wi-hint{color:var(--muted);font-size:0.82rem;font-style:italic;}
+.wi-pts{display:flex;flex-direction:column;gap:0.45rem;}
+.wi-pt{display:flex;align-items:center;gap:0.6rem;font-size:0.84rem;font-weight:700;color:var(--text);}
+.wi-dot{width:9px;height:9px;border-radius:50%;background:var(--red);flex-shrink:0;}
+.wslice{cursor:pointer;}
+.wslice path{transition:all 0.2s;}
+.wslice:hover path{opacity:0.82;}
+.wslice.act path{stroke:#fff;stroke-width:4;}
+
+/* COMPARE */
+.cmp-box{background:#fff;border:2px solid var(--border);border-radius:20px;padding:1.8rem;box-shadow:0 4px 14px var(--shadow);}
+.cmp-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:1px;margin-bottom:1rem;}
+.cmp-pills{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1.4rem;}
+.cpill{padding:0.4rem 1rem;border-radius:50px;border:2px solid var(--border);background:transparent;color:var(--muted);font-size:0.76rem;font-weight:800;cursor:pointer;transition:all 0.2s;font-family:'Nunito',sans-serif;}
+.cpill.on{background:var(--red);border-color:var(--red);color:#fff;}
+.cmp-res{display:none;}
+.cmp-res.show{display:block;animation:pgIn 0.3s ease;}
+.cmp-row{margin-bottom:1.1rem;}
+.cmp-met{font-size:0.65rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:0.45rem;}
+.cmp-bars{display:flex;flex-direction:column;gap:0.3rem;}
+.cmp-br{display:flex;align-items:center;gap:0.7rem;}
+.cmp-lbl{font-size:0.76rem;font-weight:800;width:85px;flex-shrink:0;display:flex;align-items:center;gap:0.35rem;}
+.cmp-track{flex:1;height:9px;background:var(--surface);border-radius:5px;overflow:hidden;}
+.cmp-bfill{height:100%;border-radius:5px;transition:width 0.8s ease;}
+.cmp-val{font-size:0.76rem;font-weight:900;width:30px;text-align:right;}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;background:#1a0a0a;border:2px solid var(--red);border-radius:14px;padding:0.85rem 1.3rem;font-size:0.83rem;font-weight:700;color:#fff;z-index:9000;transform:translateY(80px);opacity:0;transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);display:flex;align-items:center;gap:0.6rem;box-shadow:0 8px 26px rgba(230,57,70,0.25);}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* MOBILE NAV */
+.mobnav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:500;background:rgba(255,255,255,0.97);backdrop-filter:blur(16px);border-top:2px solid var(--border);padding:0.4rem 0.3rem;}
+.mobitems{display:flex;justify-content:space-around;}
+.mobitem{display:flex;flex-direction:column;align-items:center;gap:0.2rem;cursor:pointer;padding:0.45rem 0.7rem;border-radius:10px;transition:all 0.2s;}
+.mobitem:hover,.mobitem.on{background:var(--surface);}
+.mobitem.on .mob-lbl{color:var(--red);}
+.mob-ico{font-size:1.1rem;}
+.mob-lbl{font-size:0.58rem;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;color:var(--muted);}
+
+/* UTILS */
+.fi{opacity:0;transform:translateY(18px);transition:opacity 0.5s,transform 0.5s;}
+.fi.on{opacity:1;transform:none;}
+.fi1{transition-delay:0.08s;}.fi2{transition-delay:0.16s;}.fi3{transition-delay:0.24s;}.fi4{transition-delay:0.32s;}
+
+@media(max-width:768px){
+  .mobnav{display:block;}
+  .navlinks{display:none;}
+  body{padding-bottom:75px;}
+  .qopts{grid-template-columns:1fr;}
+  .db-row{grid-template-columns:repeat(3,1fr);}
+  .tr-grid{grid-template-columns:1fr 1fr;}
+  .sum-strip{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:460px){
+  .tr-grid{grid-template-columns:1fr;}
+  .db-row{grid-template-columns:repeat(2,1fr);}
+  .sum-strip{grid-template-columns:repeat(2,1fr);}
+}
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="logo">FitIQ</div>
-  <ul class="nav-links">
-    <li><a href="#components">Components</a></li>
-    <li><a href="#wheel">Wheel</a></li>
-    <li><a href="#quiz">Quiz</a></li>
+<!-- BG FLOATS -->
+<div class="bg-floats" id="bgf"></div>
+<div class="scroll-bar" id="sb"></div>
+
+<!-- LOADER -->
+<div class="loader" id="ldr">
+  <div class="ld-logo">FitIQ</div>
+  <div class="ld-sub">Loading your fitness guide...</div>
+  <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span id="t-ico">✅</span><span id="t-msg">Saved!</span></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="logo" onclick="go('home')">Fit<em>IQ</em></div>
+  <ul class="navlinks">
+    <li><a onclick="go('home')" id="n-home" class="on">🏠 Home</a></li>
+    <li><a onclick="go('learn')" id="n-learn">📚 Learn</a></li>
+    <li><a onclick="go('quiz')" id="n-quiz">🧠 Quiz</a></li>
+    <li><a onclick="go('tracker')" id="n-tracker">📊 Tracker</a></li>
+    <li><a onclick="go('wheel')" id="n-wheel">🎯 Wheel</a></li>
   </ul>
 </nav>
 
-<section class="hero">
-  <div class="hero-orbs">
-    <div class="orb orb1"></div><div class="orb orb2"></div>
-    <div class="orb orb3"></div><div class="orb orb4"></div>
+<!-- MOBILE NAV -->
+<div class="mobnav">
+  <div class="mobitems">
+    <div class="mobitem on" id="m-home" onclick="go('home')"><span class="mob-ico">🏠</span><span class="mob-lbl">Home</span></div>
+    <div class="mobitem" id="m-learn" onclick="go('learn')"><span class="mob-ico">📚</span><span class="mob-lbl">Learn</span></div>
+    <div class="mobitem" id="m-quiz" onclick="go('quiz')"><span class="mob-ico">🧠</span><span class="mob-lbl">Quiz</span></div>
+    <div class="mobitem" id="m-tracker" onclick="go('tracker')"><span class="mob-ico">📊</span><span class="mob-lbl">Track</span></div>
+    <div class="mobitem" id="m-wheel" onclick="go('wheel')"><span class="mob-ico">🎯</span><span class="mob-lbl">Wheel</span></div>
   </div>
-  <div class="hero-content">
-    <div class="hero-tag">Interactive Guide</div>
-    <h1>Components<span class="line2">of Fitness</span></h1>
-    <p class="hero-sub">Discover the 5 essential pillars of physical fitness — what they mean, how to test them, and why they matter for your health.</p>
-    <div class="hero-badges">
-      <span class="badge" style="background:rgba(255,107,107,0.18);color:#FF6B6B;">❤️ Cardiovascular</span>
-      <span class="badge" style="background:rgba(255,217,61,0.18);color:#FFD93D;">💪 Strength</span>
-      <span class="badge" style="background:rgba(107,203,119,0.18);color:#6BCB77;">🔁 Endurance</span>
-      <span class="badge" style="background:rgba(77,150,255,0.18);color:#4D96FF;">🤸 Flexibility</span>
-      <span class="badge" style="background:rgba(199,125,255,0.18);color:#C77DFF;">⚖️ Body Composition</span>
+</div>
+
+<!-- ===== HOME ===== -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-badge"><span class="hblink"></span>Interactive Fitness Guide</div>
+    <h1><span class="h1l1">Components</span><span class="h1l2">of Fitness</span></h1>
+    <p class="hero-sub">Master the 5 essential pillars of physical fitness. Learn, quiz yourself, and track your progress all in one place.</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-n" data-t="5">0</div><div class="stat-l">Components</div></div>
+      <div class="stat"><div class="stat-n" data-t="10">0</div><div class="stat-l">Questions</div></div>
+      <div class="stat"><div class="stat-n" data-t="5">0</div><div class="stat-l">Pages</div></div>
     </div>
-    <a href="#components" class="cta-btn">Explore Now</a>
-    <div class="scroll-hint">↓ scroll down</div>
+    <div class="hero-btns">
+      <button class="btn-r" onclick="go('learn')">Start Learning</button>
+      <button class="btn-o" onclick="go('quiz')">Take the Quiz</button>
+    </div>
+  </section>
+
+  <section class="features">
+    <div style="text-align:center;margin-bottom:2rem;"><div style="font-size:0.7rem;font-weight:800;letter-spacing:5px;text-transform:uppercase;color:var(--red);margin-bottom:0.4rem;">Explore</div><div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3.5rem);letter-spacing:2px;">What's Inside?</div></div>
+    <div class="feat-grid">
+      <div class="fc fi" onclick="go('learn')"><span class="fc-icon">📚</span><div class="fc-name">Learn</div><div class="fc-desc">Full definitions, examples, tests & training methods for each component</div></div>
+      <div class="fc fi fi1" onclick="go('quiz')"><span class="fc-icon">🧠</span><div class="fc-name">Quiz</div><div class="fc-desc">3 modes — practice, timed & blitz with instant feedback and explanations</div></div>
+      <div class="fc fi fi2" onclick="go('tracker')"><span class="fc-icon">📊</span><div class="fc-name">Tracker</div><div class="fc-desc">Digital live dashboard with progress rings, weekly chart & goal streaks</div></div>
+      <div class="fc fi fi3" onclick="go('wheel')"><span class="fc-icon">🎯</span><div class="fc-name">Wheel</div><div class="fc-desc">Visual wheel with point-by-point component comparison side by side</div></div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== LEARN ===== -->
+<div class="page" id="page-learn">
+  <div class="sh"><div class="sh-label">Deep Dive</div><div class="sh-title">5 Key Components</div><div class="sh-sub">Click any card to expand — use the tabs to explore each section</div></div>
+  <div class="comp-list" id="compList"></div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div class="page" id="page-quiz">
+  <div class="sh"><div class="sh-label">Test Yourself</div><div class="sh-title">Fitness Quiz</div><div class="sh-sub">Choose a mode, then prove your knowledge</div></div>
+  <div class="qz-wrap">
+    <div id="qsetup">
+      <div class="qz-modes">
+        <div class="qm sel" onclick="selMode('practice',this)"><div class="qm-ico">📖</div><div class="qm-name">Practice</div><div class="qm-desc">No timer, see explanations</div></div>
+        <div class="qm" onclick="selMode('timed',this)"><div class="qm-ico">⏱️</div><div class="qm-name">Timed</div><div class="qm-desc">15 seconds per question</div></div>
+        <div class="qm" onclick="selMode('blitz',this)"><div class="qm-ico">⚡</div><div class="qm-name">Blitz</div><div class="qm-desc">8 seconds per question</div></div>
+      </div>
+      <div style="text-align:center;"><button class="btn-r" onclick="startQ()">Start Quiz 🚀</button></div>
+    </div>
+    <div class="qcard" id="qcard" style="display:none;"></div>
   </div>
-</section>
+</div>
 
-<section id="components">
-  <div class="sec-label">The Five Pillars</div>
-  <h2 class="sec-title">5 Key Components</h2>
-  <p class="sec-sub">Click any card to expand the full detailed breakdown</p>
-  <div class="cards-wrap" id="cardsWrap"></div>
-</section>
-
-<section id="wheel">
-  <div class="sec-label">Visual Map</div>
-  <h2 class="sec-title">Fitness Wheel</h2>
-  <p class="sec-sub">Click a segment to explore each component</p>
-  <div class="wheel-inner fi">
-    <div class="wheel-svg-wrap">
-      <svg width="320" height="320" viewBox="0 0 320 320" id="wheelSvg"></svg>
+<!-- ===== TRACKER ===== -->
+<div class="page" id="page-tracker">
+  <div class="sh"><div class="sh-label">Daily Log</div><div class="sh-title">Fitness Tracker</div><div class="sh-sub">Your live digital fitness dashboard — log, track & save</div></div>
+  
+  <div class="tr-wrap">
+    <div class="dboard"><div class="dboard-scanline"></div><div class="db-row" id="dboard"></div></div>
+    <div class="sum-strip">
+      <div class="sum-card"><div class="sum-n" id="s-streak">3</div><div class="sum-l">🔥 Day Streak</div></div>
+      <div class="sum-card"><div class="sum-n" id="s-total">0</div><div class="sum-l">⏱️ Total Today</div></div>
+      <div class="sum-card"><div class="sum-n" id="s-goals">0</div><div class="sum-l">✅ Goals Hit</div></div>
+      <div class="sum-card"><div class="sum-n" id="s-pct">0%</div><div class="sum-l">📈 Progress</div></div>
     </div>
-    <div class="wheel-info-box" id="wInfo">
-      <p class="wi-hint">👆 Click any segment on the wheel to see details about that component.</p>
+
+    <!-- OVERALL PROGRESS BAR -->
+    <div class="overall-prog">
+      <div class="op-hd"><span class="op-lbl">🎯 Overall Daily Goal</span><span class="op-val" id="op-val">0%</span></div>
+      <div class="op-track"><div class="op-fill" id="op-fill"></div></div>
+      <div class="op-milestones"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100% 🏆</span></div>
+    </div>
+
+    <div class="tr-grid" id="trGrid"></div>
+    <div class="wchart-box">
+      <div class="wchart-hd"><div class="wchart-title">📅 This Week</div><div class="wchart-leg">Today = <span style="color:var(--red)">Orange</span></div></div>
+      <div class="bar-chart" id="wkChart"></div>
+    </div>
+    <div class="tips-box"><div class="tips-title">💡 Daily Fitness Tips</div><div id="tipsList"></div></div>
+    <div class="tr-actions">
+      <button class="btn-ghost" onclick="resetTr()">🔄 Reset Today</button>
+      <button class="btn-r" onclick="saveTr()">💾 Save Progress</button>
     </div>
   </div>
-</section>
+</div>
 
-<section id="quiz">
-  <div class="sec-label">Test Yourself</div>
-  <h2 class="sec-title">Quick Quiz</h2>
-  <p class="sec-sub">5 questions — how much do you know?</p>
-  <div class="quiz-card fi" id="quizCard"></div>
-</section>
-
-<footer>Components of Fitness</footer>
+<!-- ===== WHEEL ===== -->
+<div class="page" id="page-wheel">
+  <div class="sh"><div class="sh-label">Visual Map</div><div class="sh-title">Fitness Wheel</div><div class="sh-sub">Click a segment to see key points — then compare components</div></div>
+  <div class="wh-wrap">
+    <div class="wh-lay">
+      <div class="wh-svg"><svg width="320" height="320" viewBox="0 0 320 320" id="wsvg"></svg></div>
+      <div class="wh-info" id="winfo"><p class="wi-hint">👆 Click any coloured segment to see the key points about that fitness component.</p></div>
+    </div>
+    <div class="cmp-box">
+      <div class="cmp-title">⚖️ Compare Components</div>
+      <div class="cmp-pills" id="cpills"></div>
+      <div class="cmp-res" id="cres"></div>
+    </div>
+  </div>
+</div>
 
 <script>
-const comps = [
-  {
-    num:'01', color:'#FF6B6B', icon:'❤️',
-    name:'Cardiovascular Endurance',
-    tagline:'The heart and lungs\' ability to fuel the body with oxygen during sustained physical activity.',
-    definition:'Cardiovascular endurance — also called aerobic fitness or cardiorespiratory endurance — is the ability of the heart, lungs, and circulatory system to efficiently deliver oxygen and nutrients to working muscles over a prolonged period of physical exertion. It reflects how well your body sustains continuous movement and recovers from exercise. The stronger your cardiovascular system, the longer and harder your body can work without fatigue. It is widely considered the most important component of health-related fitness because it directly impacts overall health and life expectancy.',
-    examples:['Long-distance running', 'Swimming laps', 'Cycling', 'Rowing', 'Jump rope', 'Aerobics classes', 'Playing football or basketball'],
-    howToTest:'The Cooper 12-Minute Run Test is the gold standard — you run as far as possible in 12 minutes and the distance is used to estimate your VO₂ max (maximum oxygen uptake). Other tests include the Beep Test (20m shuttle run) and the Harvard Step Test. VO₂ max is the scientific measure of cardiovascular efficiency — elite athletes can exceed 70 ml/kg/min.',
-    howToImprove:[
-      'Run, cycle or swim at moderate intensity for 30+ minutes, 3–5 times per week',
-      'Try interval training — alternate between high and low intensity bursts',
-      'Gradually increase duration or intensity each week (10% rule)',
-      'Sports like football, basketball and tennis naturally build cardio endurance'
-    ],
-    benefits:[
-      'Strengthens the heart muscle, reducing risk of heart disease and stroke',
-      'Lowers resting blood pressure and bad cholesterol (LDL)',
-      'Improves lung capacity and oxygen efficiency',
-      'Boosts energy levels and reduces fatigue in daily life',
-      'Releases endorphins that reduce stress, anxiety and depression',
-      'Helps manage body weight and reduces risk of Type 2 diabetes'
-    ],
-    fact:'People with high cardiovascular endurance have up to 35% lower risk of dying from heart disease.',
-    factColor:'rgba(255,107,107,0.2)', factText:'#FF6B6B'
-  },
-  {
-    num:'02', color:'#FFD93D', icon:'💪',
-    name:'Muscular Strength',
-    tagline:'The maximum force a muscle or muscle group can produce in a single all-out effort.',
-    definition:'Muscular strength is defined as the maximum amount of force that a muscle or group of muscles can exert against a resistance in a single maximal effort. It represents the peak capacity of your muscles — how hard they can push, pull or lift in one explosive moment. Strength is the foundation upon which power, endurance and many athletic skills are built. It differs from muscular endurance in that strength focuses on maximum force in one attempt, rather than repeated effort over time. Having good muscular strength protects the body\'s joints, improves posture, and supports overall functional movement.',
-    examples:['One-rep max bench press', 'Deadlift', 'Back squat', 'Overhead press', 'Arm wrestling', 'Carrying heavy shopping bags'],
-    howToTest:'The One-Rep Max (1RM) test measures the heaviest weight you can lift for exactly one repetition with correct form. It can be tested on exercises like the bench press, squat or deadlift. Hand grip dynamometer tests are also widely used in schools and clinics because they are safe and quick. A higher 1RM relative to body weight indicates greater muscular strength.',
-    howToImprove:[
-      'Lift heavy weights at low repetitions (1–6 reps per set)',
-      'Focus on compound exercises: squats, deadlifts, bench press, pull-ups',
-      'Allow 2–3 minutes of rest between sets to allow full muscle recovery',
-      'Follow progressive overload — gradually increase weight each week',
-      'Ensure adequate protein intake (1.6–2.2g per kg of body weight) for muscle repair'
-    ],
-    benefits:[
-      'Increases bone density, significantly reducing risk of osteoporosis',
-      'Boosts resting metabolic rate — more muscle burns more calories at rest',
-      'Protects joints and reduces injury risk in everyday and sporting activity',
-      'Improves posture and body alignment',
-      'Enhances athletic performance across virtually all sports',
-      'Supports healthy ageing — muscle mass naturally declines after 30'
-    ],
-    fact:'After age 30, adults lose 3–8% of muscle mass per decade without resistance training.',
-    factColor:'rgba(255,217,61,0.2)', factText:'#FFD93D'
-  },
-  {
-    num:'03', color:'#6BCB77', icon:'🔁',
-    name:'Muscular Endurance',
-    tagline:'The ability of muscles to exert force repeatedly over time without becoming fatigued.',
-    definition:'Muscular endurance is the capacity of a muscle or group of muscles to perform repeated contractions or sustain a contraction for an extended period of time without significant fatigue. While muscular strength is about maximum force in a single effort, muscular endurance is about sustaining effort over many repetitions or a long duration. It is essential for everyday tasks and athletic performance — whether you\'re holding a plank position, cycling for an hour, or completing a set of 30 sit-ups. Good muscular endurance also improves posture, reduces injury risk, and supports functional independence throughout life.',
-    examples:['Completing 50 push-ups', '3-minute plank hold', 'Long-distance rowing', 'Carrying a heavy bag for a long distance', 'Repetitive lifting at work', 'Rock climbing'],
-    howToTest:'The most common tests are the 1-Minute Sit-Up Test and the 1-Minute Push-Up Test, which count how many repetitions can be completed in 60 seconds with correct form. The Flexed Arm Hang Test measures how long you can hold a pull-up position. Schools frequently use these as part of standard fitness assessments.',
-    howToImprove:[
-      'Train with lighter weights at higher repetitions (15–25 reps per set)',
-      'Use bodyweight exercises: push-ups, sit-ups, lunges, planks, squats',
-      'Perform circuit training with minimal rest between exercises',
-      'Incorporate activities like cycling, rowing and swimming',
-      'Gradually increase number of reps or duration each week'
-    ],
-    benefits:[
-      'Improves posture by strengthening core and stabilising muscles',
-      'Reduces risk of repetitive strain injuries and chronic back pain',
-      'Enhances performance in endurance sports like cycling and swimming',
-      'Makes everyday tasks — like climbing stairs or carrying shopping — much easier',
-      'Delays muscle fatigue during physical activity',
-      'Supports long-term musculoskeletal health and independence in older age'
-    ],
-    fact:'A strong core (muscular endurance) reduces lower back pain by up to 40% in adults.',
-    factColor:'rgba(107,203,119,0.2)', factText:'#6BCB77'
-  },
-  {
-    num:'04', color:'#4D96FF', icon:'🤸',
-    name:'Flexibility',
-    tagline:'The range of motion available at a joint, enabling the body to move freely and fluidly.',
-    definition:'Flexibility is the ability of a joint or series of joints to move through their full, unrestricted range of motion (ROM). It depends on the elasticity of muscles, tendons, and ligaments surrounding a joint. Flexibility is highly specific — being flexible in one area (e.g. hamstrings) does not guarantee flexibility elsewhere (e.g. shoulders). It naturally decreases with age and inactivity, which is why regular stretching is vital. Good flexibility is critical for injury prevention, postural balance, athletic performance, and quality of daily movement. There are two main types: static flexibility (holding a stretched position) and dynamic flexibility (moving a joint through its full range during activity).',
-    examples:['Touching your toes with straight legs', 'Full overhead shoulder rotation', 'Deep yoga poses like the pigeon or lotus', 'Doing the splits', 'Ballet and gymnastics movements', 'A goalkeeper diving full stretch'],
-    howToTest:'The Sit-and-Reach Test is the most widely used flexibility test — you slide a ruler forward with both hands while seated and measure how far past your toes you can reach. Goniometers (angle-measuring devices) are used clinically to measure joint range of motion precisely. The Thomas Test and Apley Scratch Test assess hip flexor and shoulder flexibility respectively.',
-    howToImprove:[
-      'Practise static stretching after exercise — hold each stretch for 30–60 seconds',
-      'Try yoga or Pilates regularly — both dramatically improve whole-body flexibility',
-      'Use dynamic stretching as a warm-up before sports (leg swings, arm circles)',
-      'Foam rolling (self-myofascial release) reduces muscle tightness and improves range',
-      'Stretch consistently — flexibility requires daily practice to improve significantly'
-    ],
-    benefits:[
-      'Reduces muscle soreness and stiffness after exercise',
-      'Significantly lowers risk of muscle strains and ligament sprains',
-      'Improves posture by releasing tight hip flexors and chest muscles',
-      'Enhances athletic performance by allowing greater power and range of movement',
-      'Relieves chronic pain, particularly lower back and neck pain',
-      'Improves circulation and supports muscle recovery'
-    ],
-    fact:'Sedentary adults can lose up to 50% of their joint flexibility between ages 30 and 70.',
-    factColor:'rgba(77,150,255,0.2)', factText:'#4D96FF'
-  },
-  {
-    num:'05', color:'#C77DFF', icon:'⚖️',
-    name:'Body Composition',
-    tagline:'The proportion of fat mass versus lean mass that makes up your total body weight.',
-    definition:'Body composition refers to the percentages of fat, muscle, bone, and water that make up the human body. Unlike body weight alone, which tells you very little, body composition gives a detailed picture of your health and physical fitness. Two individuals can weigh exactly the same yet have completely different body compositions — one might have 12% body fat and extensive lean muscle, while the other might carry 30% body fat. The key distinction is between fat mass (adipose tissue, essential and non-essential) and lean mass (muscles, bones, organs, blood, and water). A healthy body composition — lower fat percentage and higher lean mass — is strongly associated with reduced disease risk, better athletic performance, and improved quality of life.',
-    examples:['An athlete and an inactive person weighing 70kg can have very different compositions', 'A bodybuilder with 8% body fat vs average person with 25%', 'Weight loss without exercise can reduce muscle mass (bad composition change)', 'Resistance training can increase weight but dramatically improve composition'],
-    howToTest:'Multiple methods exist with varying accuracy: BMI (Body Mass Index) is quick but doesn\'t distinguish fat from muscle. Skinfold caliper tests pinch subcutaneous fat at multiple sites (bicep, tricep, subscapular, suprailiac). Bioelectrical Impedance Analysis (BIA) sends a harmless current through the body to estimate fat vs lean mass. DEXA scan (Dual-energy X-ray Absorptiometry) is the gold standard — it provides a full scan of bone, fat, and muscle distribution with extreme precision.',
-    howToImprove:[
-      'Combine resistance training (to build lean muscle) with cardio (to burn fat)',
-      'Eat a diet high in lean protein: chicken, fish, eggs, legumes',
-      'Create a modest calorie deficit to reduce fat without losing muscle',
-      'Prioritise sleep — poor sleep increases fat-storing hormones (cortisol, ghrelin)',
-      'Reduce ultra-processed foods, added sugars and alcohol which promote fat storage',
-      'Stay consistently active — even walking 10,000 steps/day improves composition over time'
-    ],
-    benefits:[
-      'Lower body fat % significantly reduces risk of Type 2 diabetes, heart disease and stroke',
-      'Higher muscle mass increases resting metabolic rate — you burn more calories doing nothing',
-      'Improved joint health and mobility with reduced stress on knees and hips',
-      'Better hormonal balance — fat tissue produces oestrogen and inflammatory compounds',
-      'Enhanced athletic performance — more power, speed and endurance per kilogram of body weight',
-      'Improved self-confidence, energy levels and mental health'
-    ],
-    fact:'Healthy body fat ranges are 6–24% for men and 16–30% for women depending on age and fitness level.',
-    factColor:'rgba(199,125,255,0.2)', factText:'#C77DFF'
-  }
+// ════════ DATA ════════
+const C=[
+  {id:'cardio',num:'01',color:'#E63946',icon:'❤️',name:'Cardiovascular Endurance',tag:'Heart & lungs delivering oxygen during sustained activity.',
+   def:'The ability of the heart, lungs, and circulatory system to supply oxygen to working muscles over extended periods. Measured by VO₂ max. The stronger your cardiovascular system, the longer you can exercise without fatigue.',
+   ex:['Long-distance running (5km, 10km)','Swimming laps for 20+ minutes','Cycling at a sustained pace','Playing football or basketball','Skipping rope continuously'],
+   test:'Cooper 12-Minute Run — run as far as possible in 12 minutes. Distance estimates your VO₂ max. Also: Beep Test (20m shuttle run) and Harvard Step Test.',
+   imp:['Run/swim/cycle 30+ mins, 3–5x per week','HIIT: 30s sprint, 90s rest, repeat 8–10 times','Aim for 150 mins moderate exercise per week','Gradually increase intensity by 10% each week'],
+   ben:['Reduces heart disease risk by up to 35%','Lowers blood pressure and bad cholesterol','Boosts energy and reduces daily fatigue','Improves sleep quality and mental health'],
+   pts:['Heart & lungs supply oxygen to muscles','VO₂ max is the key scientific measure','Cooper 12-min Run is the standard test','Reduces heart disease risk by 35%','Improves with 150 mins aerobic/week'],
+   d:75,p:90,i:95,t:80},
+  {id:'strength',num:'02',color:'#c1121f',icon:'💪',name:'Muscular Strength',tag:'Maximum force a muscle can produce in a single effort.',
+   def:'The maximum force a muscle or group of muscles can exert against resistance in one maximal effort. The foundation of power and athletic performance. Different from endurance — strength is about peak force in a single attempt.',
+   ex:['One-rep max bench press','Deadlift with maximum weight','Heavy back squat','Overhead shoulder press','Arm wrestling'],
+   test:'One-Rep Max (1RM) test — heaviest weight lifted once with correct form. Hand Grip Dynamometer used in schools. A 1RM relative to body weight is the benchmark.',
+   imp:['Lift heavy at low reps (1–6 reps per set)','Focus on compound lifts: squat, deadlift, bench press','Progressive overload — increase weight weekly','Rest 2–3 mins between sets','1.6–2.2g protein per kg body weight daily'],
+   ben:['Increases bone density — prevents osteoporosis','Boosts resting metabolic rate','Protects joints from injury','Slows age-related muscle loss after 30'],
+   pts:['Maximum force in ONE single effort','1RM test is the standard measure','Compound lifts build strength fastest','Adults lose 3–8% muscle/decade after 30','Progressive overload is the key principle'],
+   d:80,p:85,i:88,t:70},
+  {id:'endurance',num:'03',color:'#e07a5f',icon:'🔁',name:'Muscular Endurance',tag:'Muscles sustaining repeated contractions without fatigue.',
+   def:'The capacity of muscles to perform repeated contractions over time without significant fatigue. Unlike strength, endurance is about sustaining effort across many repetitions or a long duration — essential for sport and everyday tasks.',
+   ex:['50+ push-ups in a row','3-minute plank hold','Long-distance rowing','Rock climbing routes','Repetitive lifting tasks at work'],
+   test:'1-Minute Push-Up Test — count reps in 60 seconds. 1-Minute Sit-Up Test. Flexed Arm Hang — how long you hold chin above the bar with correct grip.',
+   imp:['High reps, lighter weight (15–25 reps per set)','Circuit training with minimal rest between exercises','Bodyweight: planks, squats, lunges, burpees','Cycling and swimming for whole-body endurance'],
+   ben:['Reduces lower back pain by up to 40%','Improves posture via stronger core muscles','Delays muscle fatigue during activity','Makes everyday tasks significantly easier'],
+   pts:['Repeated force over time — not one effort','Push-up/sit-up test is the standard','High-rep training is the key method','Core endurance cuts back pain by 40%','Essential for all sports lasting many minutes'],
+   d:60,p:75,i:82,t:92},
+  {id:'flex',num:'04',color:'#f4a261',icon:'🤸',name:'Flexibility',tag:'Range of motion available at a joint.',
+   def:'The ability of joints to move through their full range of motion. Depends on elasticity of muscles, tendons and ligaments. Naturally decreases with age. Two types: static (holding a stretch) and dynamic (moving through range during activity).',
+   ex:['Touching your toes with straight legs','Full overhead shoulder rotation','Deep yoga poses (pigeon, lotus)','Performing the splits','A goalkeeper\'s full-stretch dive'],
+   test:'Sit-and-Reach Test — slide hands forward past feet while seated, measured in cm. Goniometer measures joint angle in degrees. Thomas Test for hip flexor flexibility.',
+   imp:['Static stretching after exercise — hold 30–60 seconds','Yoga or Pilates 2–3x per week','Dynamic stretching as warm-up before sport','Foam rolling to release muscle tightness daily'],
+   ben:['Reduces risk of muscle strains and sprains','Relieves chronic back and neck pain','Improves athletic performance and posture','Maintains functional independence in older age'],
+   pts:['Range of motion around a joint','Sit-and-reach is the standard school test','Yoga & stretching are the best methods','Sedentary adults lose 50% flexibility by 70','Two types: static vs dynamic flexibility'],
+   d:45,p:78,i:80,t:95},
+  {id:'body',num:'05',color:'#e76f51',icon:'⚖️',name:'Body Composition',tag:'Ratio of fat mass to lean mass in the body.',
+   def:'The proportion of fat mass versus lean mass (muscle, bone, water) in the body. Two people can weigh exactly the same yet have very different compositions. Healthy composition means lower excess fat and higher lean mass — strongly linked to reduced disease risk.',
+   ex:['Athlete vs inactive person — same weight, different fat %','Bodybuilder at 8% vs sedentary person at 28% body fat','Crash dieting reduces muscle AND fat (bad outcome)','Resistance training improves composition without weight change'],
+   test:'BMI = weight÷height² (quick but imprecise). Skinfold Calipers — pinch fat at multiple body sites. Bioelectrical Impedance Analysis (BIA). DEXA Scan — gold standard, full-body precision map.',
+   imp:['Combine resistance training + regular cardio','Eat 1.6–2.2g protein per kg body weight','200–400 kcal deficit to reduce fat without losing muscle','Sleep 7–9 hours — poor sleep raises fat-storing hormones'],
+   ben:['Lower fat % reduces diabetes and heart disease risk','More muscle = higher resting metabolic rate','Better power-to-weight ratio for athletic performance','Improved energy levels and mental health'],
+   pts:['Fat mass vs lean mass ratio — not just weight','DEXA scan is the gold standard test','BMI does NOT distinguish fat from muscle','Sleep significantly affects body composition','Diet + exercise together is most effective'],
+   d:55,p:82,i:85,t:65}
 ];
 
-const quizQ = [
-  { q:'Which fitness component is measured by VO₂ max and the Cooper 12-minute run test?', opts:['Muscular Strength','Body Composition','Cardiovascular Endurance','Flexibility'], ans:2 },
-  { q:'Muscular strength is best defined as:', opts:['Repeated muscle contractions over time','Maximum force produced in a single effort','Range of motion at a joint','The ratio of fat to lean mass'], ans:1 },
-  { q:'The sit-and-reach test is the standard test for measuring:', opts:['Muscular Endurance','Cardiovascular Endurance','Body Composition','Flexibility'], ans:3 },
-  { q:'Which method is considered the gold standard for measuring body composition?', opts:['BMI calculation','Skinfold calipers','DEXA scan','Bioelectrical Impedance'], ans:2 },
-  { q:'High-rep, low-weight training primarily develops which component?', opts:['Flexibility','Muscular Endurance','Body Composition','Cardiovascular Endurance'], ans:1 }
+const QS=[
+  {q:'Which component is measured by VO₂ max and the Cooper 12-minute run?',o:['Muscular Strength','Body Composition','Cardiovascular Endurance','Flexibility'],a:2,e:'VO₂ max measures maximum oxygen uptake — the gold standard for cardiovascular endurance.'},
+  {q:'Muscular strength is best defined as:',o:['Repeated contractions over time','Maximum force in a single effort','Range of motion at a joint','Fat vs lean mass ratio'],a:1,e:'Strength = maximum force in ONE maximal effort. Endurance = repeated efforts over time.'},
+  {q:'The sit-and-reach test measures which fitness component?',o:['Muscular Endurance','Cardiovascular Endurance','Body Composition','Flexibility'],a:3,e:'The sit-and-reach test measures hamstring and lower back flexibility — range of motion.'},
+  {q:'Which is the gold standard test for body composition?',o:['BMI','Skinfold Calipers','DEXA Scan','Bioelectrical Impedance'],a:2,e:'DEXA scan gives a precise full-body map of bone, fat and muscle — far more accurate than BMI.'},
+  {q:'High-rep, low-weight training primarily develops which component?',o:['Flexibility','Muscular Endurance','Body Composition','Cardiovascular Endurance'],a:1,e:'High reps with lighter weight trains muscles to sustain repeated efforts — muscular endurance.'},
+  {q:'Healthy body fat % range for men is approximately:',o:['1–5%','6–24%','30–40%','45–55%'],a:1,e:'Healthy body fat for men is roughly 6–24% depending on age and fitness level.'},
+  {q:'Yoga and Pilates primarily improve which component?',o:['Muscular Strength','Cardiovascular Endurance','Flexibility','Body Composition'],a:2,e:'Yoga and Pilates are renowned for improving range of motion through sustained stretching.'},
+  {q:'After age 30, adults lose approximately how much muscle per decade without training?',o:['1–2%','3–8%','10–15%','20–25%'],a:1,e:'This is called sarcopenia — resistance training is the most effective way to slow or reverse it.'},
+  {q:'The Beep Test (20m shuttle run) primarily measures:',o:['Flexibility','Muscular Endurance','Body Composition','Cardiovascular Endurance'],a:3,e:'The Beep Test progressively increases pace to test aerobic capacity — cardiovascular endurance.'},
+  {q:'The 1-Minute Push-Up Test measures which component?',o:['Muscular Strength','Flexibility','Muscular Endurance','Body Composition'],a:2,e:'The 1-Minute Push-Up test specifically measures muscular endurance — sustained repeated effort.'}
 ];
 
-// BUILD CARDS
-const wrap = document.getElementById('cardsWrap');
-comps.forEach((c, idx) => {
-  const card = document.createElement('div');
-  card.className = 'comp-card fi';
-  card.style.setProperty('--card-color', c.color);
-  card.innerHTML = `
-    <div class="card-header">
-      <div class="card-num">${c.num}</div>
-      <div>
-        <div class="card-name">${c.icon} ${c.name}</div>
-        <div class="card-tagline">${c.tagline}</div>
-      </div>
-      <div class="card-icon-wrap">+</div>
-    </div>
-    <div class="card-body">
-      <div class="card-body-inner">
+const TC=[
+  {id:'cardio',lbl:'Cardio',ico:'❤️',unit:'mins',goal:30,color:'#E63946'},
+  {id:'strength',lbl:'Strength',ico:'💪',unit:'sets',goal:15,color:'#c1121f'},
+  {id:'endurance',lbl:'Endurance',ico:'🔁',unit:'reps',goal:50,color:'#e07a5f'},
+  {id:'flex',lbl:'Flexibility',ico:'🤸',unit:'mins',goal:15,color:'#f4a261'},
+  {id:'body',lbl:'Activity',ico:'⚖️',unit:'mins',goal:20,color:'#e76f51'}
+];
 
-        <div class="def-block">
-          <h4>📖 Full Definition</h4>
-          <p>${c.definition}</p>
-        </div>
+const TIPS=[
+  {i:'💧',t:'Stay Hydrated',d:'Drink 2L of water daily. Dehydration reduces endurance by 25% and impairs performance.'},
+  {i:'😴',t:'Prioritise Sleep',d:'7–9 hours nightly. Growth hormone essential for muscle repair releases during deep sleep.'},
+  {i:'🥗',t:'Eat Protein',d:'1.6–2.2g per kg body weight daily for muscle repair, maintenance and composition improvement.'},
+  {i:'🔥',t:'Warm Up Properly',d:'5–10 mins dynamic warm-up before exercise to prevent injury and boost performance.'},
+  {i:'📈',t:'Progressive Overload',d:'Increase demand each week — more reps, weight or time. This is the foundation of all improvement.'}
+];
 
-        <div class="info-grid">
-          <div class="info-tile">
-            <h4>🏃 Real-World Examples</h4>
-            <ul>${c.examples.map(e=>`<li>${e}</li>`).join('')}</ul>
-          </div>
-          <div class="info-tile">
-            <h4>📏 How to Test It</h4>
-            <p>${c.howToTest}</p>
-          </div>
-        </div>
+const WDAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+let wkData=[42,65,30,78,55,90,0];
+let trVals={cardio:0,strength:0,endurance:0,flex:0,body:0};
+let streak=3;
 
-        <div class="info-grid">
-          <div class="info-tile">
-            <h4>🏋️ How to Improve</h4>
-            <ul>${c.howToImprove.map(e=>`<li>${e}</li>`).join('')}</ul>
-          </div>
-          <div class="info-tile">
-            <h4>✅ Health Benefits</h4>
-            <ul>${c.benefits.map(e=>`<li>${e}</li>`).join('')}</ul>
-          </div>
-        </div>
-
-        <div class="fact-bar">
-          <div class="fact-pill" style="background:${c.factColor};color:${c.factText};">💡 Did You Know? ${c.fact}</div>
-        </div>
-
-      </div>
-    </div>`;
-  card.querySelector('.card-header').addEventListener('click', () => {
-    const isOpen = card.classList.contains('open');
-    document.querySelectorAll('.comp-card').forEach(x => x.classList.remove('open'));
-    if (!isOpen) card.classList.add('open');
-  });
-  wrap.appendChild(card);
-});
-
-// WHEEL
-const svg = document.getElementById('wheelSvg');
-const cx=160,cy=160,R=148,r=52;
-comps.forEach((c,i)=>{
-  const total=comps.length;
-  const a0=(i/total)*2*Math.PI-Math.PI/2;
-  const a1=((i+1)/total)*2*Math.PI-Math.PI/2;
-  const x1=cx+R*Math.cos(a0),y1=cy+R*Math.sin(a0);
-  const x2=cx+R*Math.cos(a1),y2=cy+R*Math.sin(a1);
-  const ix1=cx+r*Math.cos(a0),iy1=cy+r*Math.sin(a0);
-  const ix2=cx+r*Math.cos(a1),iy2=cy+r*Math.sin(a1);
-  const mid=(a0+a1)/2;
-  const lx=cx+(R*0.68)*Math.cos(mid),ly=cy+(R*0.68)*Math.sin(mid);
-  const g=document.createElementNS('http://www.w3.org/2000/svg','g');
-  g.setAttribute('class','wheel-slice');
-  const path=document.createElementNS('http://www.w3.org/2000/svg','path');
-  path.setAttribute('d',`M ${ix1} ${iy1} L ${x1} ${y1} A ${R} ${R} 0 0 1 ${x2} ${y2} L ${ix2} ${iy2} A ${r} ${r} 0 0 0 ${ix1} ${iy1} Z`);
-  path.setAttribute('fill',c.color); path.setAttribute('stroke','#0d0d16'); path.setAttribute('stroke-width','3');
-  const txt=document.createElementNS('http://www.w3.org/2000/svg','text');
-  txt.setAttribute('x',lx);txt.setAttribute('y',ly);txt.setAttribute('text-anchor','middle');txt.setAttribute('dominant-baseline','middle');
-  txt.setAttribute('font-size','22');txt.setAttribute('fill','#fff');txt.textContent=c.icon;
-  g.appendChild(path);g.appendChild(txt);
-  g.addEventListener('click',()=>{
-    document.querySelectorAll('.wheel-slice').forEach(s=>s.classList.remove('selected'));
-    g.classList.add('selected');
-    document.getElementById('wInfo').innerHTML=`
-      <div class="wi-num" style="color:${c.color}">${c.num}</div>
-      <div class="wi-name">${c.name}</div>
-      <div class="wi-desc">${c.tagline}</div>
-      <div class="wi-desc" style="margin-top:0.5rem;font-size:0.82rem;">${c.definition.substring(0,200)}...</div>
-      <div class="wi-fact" style="margin-top:1rem;background:${c.factColor};color:${c.factText};">💡 ${c.fact}</div>`;
-  });
-  svg.appendChild(g);
-});
-const ct=document.createElementNS('http://www.w3.org/2000/svg','text');
-ct.setAttribute('x',160);ct.setAttribute('y',156);ct.setAttribute('text-anchor','middle');ct.setAttribute('dominant-baseline','middle');
-ct.setAttribute('font-size','11');ct.setAttribute('fill','#9896b8');ct.setAttribute('font-family','Nunito,sans-serif');ct.setAttribute('font-weight','700');
-ct.textContent='FITNESS';svg.appendChild(ct);
-
-// QUIZ
-let qi=0,sc=0;
-function renderQ(){
-  const box=document.getElementById('quizCard');
-  if(qi>=quizQ.length){
-    box.innerHTML=`<div class="quiz-result">
-      <div class="result-score">${sc}/${quizQ.length}</div>
-      <div class="result-msg">${sc>=4?'🎉 Outstanding! You really know your fitness!':sc>=2?'👍 Good work! Review the cards above to improve.':'📖 Keep studying — revisit the 5 components!'}</div>
-      <button class="retry-btn" onclick="qi=0;sc=0;renderQ()">Try Again</button>
-    </div>`;return;
+// ════════ FLOATING BG ════════
+(()=>{
+  const bg=document.getElementById('bgf');
+  const ems=['❤️','💪','🔁','🤸','⚖️','🏃'];
+  for(let i=0;i<14;i++){
+    const d=document.createElement('div');d.className='bf';
+    d.textContent=ems[Math.floor(Math.random()*ems.length)];
+    d.style.cssText=`left:${Math.random()*100}%;animation-duration:${14+Math.random()*10}s;animation-delay:${Math.random()*12}s;font-size:${0.7+Math.random()*0.8}rem;`;
+    bg.appendChild(d);
   }
-  const q=quizQ[qi];
-  const pct=Math.round((qi/quizQ.length)*100);
-  box.innerHTML=`
-    <div class="quiz-top">
-      <div class="quiz-qnum">Q${qi+1} / ${quizQ.length}</div>
-      <div class="quiz-bar"><div class="quiz-bar-fill" style="width:${pct}%"></div></div>
-    </div>
-    <div class="quiz-q">${q.q}</div>
-    <div class="quiz-opts">${q.opts.map((o,i)=>`<button class="qopt" data-i="${i}">${o}</button>`).join('')}</div>
-    <div class="quiz-fb" id="qfb"></div>
-    <div class="quiz-actions"><button class="qnext" id="qnext" onclick="qi++;renderQ()">Next →</button></div>`;
-  document.querySelectorAll('.qopt').forEach(btn=>{
-    btn.addEventListener('click',function(){
-      const ch=parseInt(this.dataset.i);
-      document.querySelectorAll('.qopt').forEach(b=>b.classList.add('disabled'));
-      if(ch===q.ans){
-        this.classList.add('correct');
-        document.getElementById('qfb').textContent='✓ Correct!';
-        document.getElementById('qfb').style.color='#6BCB77'; sc++;
-      } else {
-        this.classList.add('wrong');
-        document.querySelectorAll('.qopt')[q.ans].classList.add('correct');
-        document.getElementById('qfb').textContent='✗ Incorrect — correct answer highlighted.';
-        document.getElementById('qfb').style.color='#FF6B6B';
-      }
-      document.getElementById('qnext').style.display='inline-block';
-    });
+})();
+
+// ════════ LOADER ════════
+window.addEventListener('load',()=>{setTimeout(()=>{document.getElementById('ldr').classList.add('gone');animCounters();},1800);});
+
+// ════════ SCROLL ════════
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('sb').style.width=p+'%';
+  document.getElementById('nav').classList.toggle('up',window.scrollY>50);
+});
+
+// ════════ PAGES ════════
+function go(name){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.navlinks a').forEach(a=>a.classList.remove('on'));
+  document.querySelectorAll('.mobitem').forEach(m=>m.classList.remove('on'));
+  document.getElementById('page-'+name).classList.add('active');
+  const n=document.getElementById('n-'+name);if(n)n.classList.add('on');
+  const m=document.getElementById('m-'+name);if(m)m.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(runObserver,80);
+}
+
+// ════════ COUNTERS ════════
+function animCounters(){
+  document.querySelectorAll('[data-t]').forEach(el=>{
+    const t=+el.dataset.t;let c=0;
+    const iv=setInterval(()=>{c=Math.min(c+1,t);el.textContent=c;if(c>=t)clearInterval(iv);},70);
   });
 }
-renderQ();
 
-const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('on');});},{threshold:0.1});
-document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+// ════════ TOAST ════════
+function showToast(msg,ico='✅'){
+  document.getElementById('t-msg').textContent=msg;
+  document.getElementById('t-ico').textContent=ico;
+  const el=document.getElementById('toast');el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3000);
+}
+
+// ════════ BUILD LEARN ════════
+const cList=document.getElementById('compList');
+C.forEach(c=>{
+  const el=document.createElement('div');
+  el.className='cc fi';el.id='cc-'+c.id;
+  el.innerHTML=`
+    <div class="cc-hdr">
+      <div class="cc-num">${c.num}</div>
+      <div><div class="cc-name">${c.icon} ${c.name}</div><div class="cc-tag">${c.tag}</div></div>
+      <div class="cc-tog">+</div>
+    </div>
+    <div class="cc-body">
+      <div class="cc-inner">
+        <div class="tabs">
+          <button class="tab on" onclick="swTab(event,'${c.id}','def')">📖 Definition</button>
+          <button class="tab" onclick="swTab(event,'${c.id}','ex')">🏃 Examples</button>
+          <button class="tab" onclick="swTab(event,'${c.id}','test')">📏 Test</button>
+          <button class="tab" onclick="swTab(event,'${c.id}','imp')">🏋️ Improve</button>
+          <button class="tab" onclick="swTab(event,'${c.id}','ben')">✅ Benefits</button>
+          <button class="tab" onclick="swTab(event,'${c.id}','stats')">📊 Stats</button>
+        </div>
+        <div class="tc on" id="tc-${c.id}-def"><div class="defb"><h4>📖 Definition</h4><p>${c.def}</p></div><div class="fpill">💡 Health-related component of fitness</div></div>
+        <div class="tc" id="tc-${c.id}-ex"><div class="ig">${c.ex.map((e,i)=>`<div class="it"><h4>Example ${i+1}</h4><p>${e}</p></div>`).join('')}</div></div>
+        <div class="tc" id="tc-${c.id}-test"><div class="defb"><h4>📏 Standard Tests</h4><p>${c.test}</p></div></div>
+        <div class="tc" id="tc-${c.id}-imp"><div class="it" style="border-radius:12px;"><h4>🏋️ Training Methods</h4><ul>${c.imp.map(x=>`<li>${x}</li>`).join('')}</ul></div></div>
+        <div class="tc" id="tc-${c.id}-ben"><div class="ig">${c.ben.map(b=>`<div class="it"><p>✅ ${b}</p></div>`).join('')}</div></div>
+        <div class="tc" id="tc-${c.id}-stats">
+          <div class="pb"><div class="pb-lbl"><span>Training Difficulty</span><span>${c.d}%</span></div><div class="pb-track"><div class="pb-fill" data-w="${c.d}"></div></div></div>
+          <div class="pb"><div class="pb-lbl"><span>Sport Popularity</span><span>${c.p}%</span></div><div class="pb-track"><div class="pb-fill" data-w="${c.p}"></div></div></div>
+          <div class="pb"><div class="pb-lbl"><span>Health Importance</span><span>${c.i}%</span></div><div class="pb-track"><div class="pb-fill" data-w="${c.i}"></div></div></div>
+          <div class="pb"><div class="pb-lbl"><span>Ease of Testing</span><span>${c.t}%</span></div><div class="pb-track"><div class="pb-fill" data-w="${c.t}"></div></div></div>
+        </div>
+      </div>
+    </div>`;
+  el.querySelector('.cc-hdr').addEventListener('click',()=>{
+    const open=el.classList.contains('open');
+    document.querySelectorAll('.cc').forEach(x=>x.classList.remove('open'));
+    if(!open){el.classList.add('open');setTimeout(()=>el.querySelectorAll('.pb-fill').forEach(b=>b.style.width=b.dataset.w+'%'),300);}
+  });
+  cList.appendChild(el);
+});
+
+function swTab(e,id,tab){
+  const cc=document.getElementById('cc-'+id);
+  cc.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  cc.querySelectorAll('.tc').forEach(t=>t.classList.remove('on'));
+  e.target.classList.add('on');
+  document.getElementById('tc-'+id+'-'+tab).classList.add('on');
+}
+
+// ════════ QUIZ ════════
+let qMode='practice',qIdx=0,qScore=0,qTimer=null,qTime=0,qSh=[];
+
+function selMode(m,el){
+  qMode=m;
+  document.querySelectorAll('.qm').forEach(x=>x.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function startQ(){
+  qSh=[...QS].sort(()=>Math.random()-0.5);
+  qIdx=0;qScore=0;
+  document.getElementById('qsetup').style.display='none';
+  document.getElementById('qcard').style.display='block';
+  renderQ();
+}
+
+function renderQ(){
+  if(qIdx>=qSh.length){showRes();return;}
+  const q=qSh[qIdx];
+  qTime=qMode==='blitz'?8:15;
+  const L=['A','B','C','D'];
+  const pct=Math.round(qIdx/qSh.length*100);
+  document.getElementById('qcard').innerHTML=`
+    <div class="qtop">
+      <div class="qqnum">Q${qIdx+1}/${qSh.length}</div>
+      <div class="qbar"><div class="qbar-f" style="width:${pct}%"></div></div>
+      ${qMode!=='practice'?`<div class="qtimer" id="qtmr">${qTime}</div>`:''}
+    </div>
+    <div class="qq">${q.q}</div>
+    <div class="qopts">${q.o.map((o,i)=>`<button class="qo" data-i="${i}"><span class="qo-l">${L[i]}</span>${o}</button>`).join('')}</div>
+    <div class="qfb" id="qfb"></div>
+    <div class="qactions"><button class="qnxt" id="qnxt" onclick="qIdx++;renderQ()">Next →</button></div>`;
+  document.querySelectorAll('.qo').forEach(b=>b.addEventListener('click',function(){ansQ(+this.dataset.i);}));
+  if(qMode!=='practice')runTimer();
+}
+
+function runTimer(){
+  clearInterval(qTimer);
+  qTimer=setInterval(()=>{
+    qTime--;
+    const el=document.getElementById('qtmr');
+    if(el){el.textContent=qTime;if(qTime<=3)el.classList.add('hot');}
+    if(qTime<=0){clearInterval(qTimer);ansQ(-1);}
+  },1000);
+}
+
+function ansQ(chosen){
+  clearInterval(qTimer);
+  const q=qSh[qIdx];
+  document.querySelectorAll('.qo').forEach(b=>b.classList.add('dis'));
+  const fb=document.getElementById('qfb');
+  if(chosen===q.a){
+    document.querySelectorAll('.qo')[chosen].classList.add('ok');
+    qScore++;fb.textContent='✓ Correct! '+(qMode==='practice'?q.e:'');
+    fb.className='qfb ok vis';
+  } else {
+    if(chosen>=0)document.querySelectorAll('.qo')[chosen].classList.add('no');
+    document.querySelectorAll('.qo')[q.a].classList.add('ok');
+    fb.textContent='✗ Incorrect. '+(qMode==='practice'?q.e:'Check the highlighted answer.');
+    fb.className='qfb no vis';
+  }
+  document.getElementById('qnxt').style.display='inline-block';
+}
+
+function showRes(){
+  const pct=Math.round(qScore/qSh.length*100);
+  const em=pct>=80?'🏆':pct>=60?'👍':'📖';
+  const msg=pct>=80?'Outstanding! Great work — keep it up! 💪':pct>=60?'Good work! Keep training and improving!':'Keep studying — you\'ll get there! 📖';
+  document.getElementById('qcard').innerHTML=`
+    <div class="qresult">
+      <span class="re-em">${em}</span>
+      <div class="re-sc">${qScore}/${qSh.length}</div>
+      <div class="re-msg">${msg}</div>
+      <div class="re-stats">
+        <div class="rs"><div class="rs-n">${pct}%</div><div class="rs-l">Score</div></div>
+        <div class="rs"><div class="rs-n">${qScore}</div><div class="rs-l">Correct</div></div>
+        <div class="rs"><div class="rs-n">${qSh.length-qScore}</div><div class="rs-l">Wrong</div></div>
+      </div>
+      <div class="re-btns">
+        <button class="btn-r" onclick="startQ()">Try Again</button>
+        <button class="btn-o" onclick="document.getElementById('qsetup').style.display='block';document.getElementById('qcard').style.display='none';">Change Mode</button>
+      </div>
+    </div>`;
+}
+
+// ════════ TRACKER ════════
+function buildTracker(){
+  buildDboard();buildTrCards();buildChart();updateSummary();
+}
+
+function buildDboard(){
+  const db=document.getElementById('dboard');db.innerHTML='';
+  TC.forEach(tc=>{
+    const v=trVals[tc.id]||0;
+    const pct=Math.min(v/tc.goal*100,100);
+    const d=document.createElement('div');d.className='db-cell';
+    d.innerHTML=`<span class="db-ico">${tc.ico}</span><div class="db-lbl">${tc.lbl}</div><div class="db-num" id="dv-${tc.id}">${String(v).padStart(2,'0')}</div><div class="db-unt">${tc.unit}</div><div class="db-prog"><div class="db-prog-f" id="dp-${tc.id}" style="width:${pct}%"></div></div>`;
+    db.appendChild(d);
+  });
+}
+
+function buildTrCards(){
+  const grid=document.getElementById('trGrid');grid.innerHTML='';
+  TC.forEach(tc=>{
+    const v=trVals[tc.id]||0;
+    const pct=Math.min(v/tc.goal,1);
+    const offset=201-(201*pct);
+    const d=document.createElement('div');d.className='trc fi';
+    d.innerHTML=`
+      <div class="trc-hd"><span class="trc-ico">${tc.ico}</span><span class="trc-goal">Goal: ${tc.goal} ${tc.unit}</span></div>
+      <div class="trc-name">${tc.lbl}</div>
+      <div class="ring-w">
+        <svg width="78" height="78" viewBox="0 0 78 78">
+          <circle class="r-bg" cx="39" cy="39" r="32"/>
+          <circle class="r-fill" id="ring-${tc.id}" cx="39" cy="39" r="32" stroke="${tc.color}" style="stroke-dashoffset:${offset}"/>
+        </svg>
+        <div class="r-txt"><div class="r-val" id="rv-${tc.id}">${v}</div><div class="r-unt">${tc.unit}</div></div>
+      </div>
+      <div class="trc-ctrl">
+        <button class="tbtn" onclick="adj('${tc.id}',-1)">−</button>
+        <input class="tinp" id="ti-${tc.id}" type="number" value="${v}" min="0" onchange="setV('${tc.id}',+this.value)">
+        <button class="tbtn" onclick="adj('${tc.id}',1)">+</button>
+      </div>`;
+    grid.appendChild(d);
+  });
+}
+
+function buildChart(){
+  const ch=document.getElementById('wkChart');ch.innerHTML='';
+  const mx=Math.max(...wkData,1);
+  wkData.forEach((v,i)=>{
+    const pct=v/mx*100;
+    const col=document.createElement('div');col.className='bcol';
+    col.innerHTML=`<div class="bnum">${v||''}</div><div class="barea"><div class="bfill${i===6?' today':''}\" style="height:${pct}%"></div></div><div class="bday">${WDAYS[i]}</div>`;
+    ch.appendChild(col);
+  });
+}
+
+function updateDigital(id){
+  const v=trVals[id]||0;
+  const tc=TC.find(t=>t.id===id);
+  const pct=Math.min(v/tc.goal*100,100);
+  // digital board
+  const dv=document.getElementById('dv-'+id);
+  const dp=document.getElementById('dp-'+id);
+  if(dv){dv.textContent=String(v).padStart(2,'0');dv.classList.remove('flash');void dv.offsetWidth;dv.classList.add('flash');}
+  if(dp)dp.style.width=pct+'%';
+  // ring
+  const ring=document.getElementById('ring-'+id);
+  const rv=document.getElementById('rv-'+id);
+  const ti=document.getElementById('ti-'+id);
+  const off=201-(201*Math.min(v/tc.goal,1));
+  if(ring)ring.style.strokeDashoffset=off;
+  if(rv)rv.textContent=v;
+  if(ti)ti.value=v;
+  updateSummary();
+  if(v>=tc.goal)showToast(`${tc.ico} ${tc.lbl} goal reached! 🎉`,'🏆');
+}
+
+function adj(id,d){trVals[id]=Math.max(0,(trVals[id]||0)+d);updateDigital(id);}
+function setV(id,v){trVals[id]=Math.max(0,v||0);updateDigital(id);}
+
+function updateSummary(){
+  const total=Object.values(trVals).reduce((a,b)=>a+b,0);
+  const goals=TC.filter(tc=>(trVals[tc.id]||0)>=tc.goal).length;
+  const totalGoal=TC.reduce((a,tc)=>a+tc.goal,0);
+  const pct=Math.min(Math.round(total/totalGoal*100),100);
+  document.getElementById('s-total').textContent=total;
+  document.getElementById('s-goals').textContent=goals;
+  document.getElementById('s-pct').textContent=pct+'%';
+  document.getElementById('s-streak').textContent=streak;
+  // overall progress bar
+  const opFill=document.getElementById('op-fill');
+  const opVal=document.getElementById('op-val');
+  if(opFill)opFill.style.width=pct+'%';
+  if(opVal)opVal.textContent=pct+'%';
+}
+
+function resetTr(){TC.forEach(tc=>{trVals[tc.id]=0;});buildTracker();showToast('Today\'s log reset 🔄','🔄');}
+
+function saveTr(){
+  wkData[6]=Object.values(trVals).reduce((a,b)=>a+b,0);
+  buildChart();showToast('Progress saved! Great work 💪','✅');
+}
+
+// TIPS
+const tl=document.getElementById('tipsList');
+TIPS.forEach(t=>{
+  const d=document.createElement('div');d.className='tip';
+  d.innerHTML=`<div class="tip-ico">${t.i}</div><div><strong>${t.t}</strong><span>${t.d}</span></div>`;
+  tl.appendChild(d);
+});
+
+buildTracker();
+
+// ════════ WHEEL ════════
+const svgEl=document.getElementById('wsvg');
+const cx=160,cy=160,R=148,ri=52;
+C.forEach((c,i)=>{
+  const n=C.length;
+  const a0=(i/n)*2*Math.PI-Math.PI/2;
+  const a1=((i+1)/n)*2*Math.PI-Math.PI/2;
+  const mid=(a0+a1)/2;
+  const x1=cx+R*Math.cos(a0),y1=cy+R*Math.sin(a0);
+  const x2=cx+R*Math.cos(a1),y2=cy+R*Math.sin(a1);
+  const ix1=cx+ri*Math.cos(a0),iy1=cy+ri*Math.sin(a0);
+  const ix2=cx+ri*Math.cos(a1),iy2=cy+ri*Math.sin(a1);
+  const lx=cx+R*0.67*Math.cos(mid),ly=cy+R*0.67*Math.sin(mid);
+  const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+  g.setAttribute('class','wslice');
+  const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+  path.setAttribute('d',`M ${ix1} ${iy1} L ${x1} ${y1} A ${R} ${R} 0 0 1 ${x2} ${y2} L ${ix2} ${iy2} A ${ri} ${ri} 0 0 0 ${ix1} ${iy1} Z`);
+  path.setAttribute('fill',c.color);path.setAttribute('stroke','#fff');path.setAttribute('stroke-width','3');
+  const txt=document.createElementNS('http://www.w3.org/2000/svg','text');
+  txt.setAttribute('x',lx);txt.setAttribute('y',ly);txt.setAttribute('text-anchor','middle');txt.setAttribute('dominant-baseline','middle');txt.setAttribute('font-size','20');txt.textContent=c.icon;
+  g.appendChild(path);g.appendChild(txt);
+  g.addEventListener('click',()=>{
+    document.querySelectorAll('.wslice').forEach(s=>s.classList.remove('act'));
+    g.classList.add('act');
+    document.getElementById('winfo').style.borderColor=c.color;
+    document.getElementById('winfo').innerHTML=`
+      <div class="wi-num" style="color:${c.color}">${c.num}</div>
+      <div class="wi-name">${c.icon} ${c.name}</div>
+      <div class="wi-desc">${c.tag}</div>
+      <div class="wi-pts">${c.pts.map(p=>`<div class="wi-pt"><div class="wi-dot" style="background:${c.color}"></div>${p}</div>`).join('')}</div>`;
+  });
+  svgEl.appendChild(g);
+});
+const ct=document.createElementNS('http://www.w3.org/2000/svg','text');
+ct.setAttribute('x',160);ct.setAttribute('y',157);ct.setAttribute('text-anchor','middle');ct.setAttribute('dominant-baseline','middle');ct.setAttribute('font-size','10');ct.setAttribute('fill','#8a4a4a');ct.setAttribute('font-family','Nunito,sans-serif');ct.setAttribute('font-weight','800');ct.textContent='FITNESS';
+svgEl.appendChild(ct);
+
+// COMPARE
+const cpEl=document.getElementById('cpills');let selCmp=[];
+C.forEach(c=>{
+  const btn=document.createElement('button');
+  btn.className='cpill';btn.textContent=c.icon+' '+c.name.split(' ')[0];
+  btn.addEventListener('click',()=>{
+    btn.classList.toggle('on');
+    selCmp=btn.classList.contains('on')?[...selCmp,c.id]:selCmp.filter(x=>x!==c.id);
+    renderCmp();
+  });
+  cpEl.appendChild(btn);
+});
+
+function renderCmp(){
+  const box=document.getElementById('cres');
+  if(selCmp.length<2){box.classList.remove('show');return;}
+  const sel=C.filter(c=>selCmp.includes(c.id));
+  const metrics=[{k:'d',l:'Training Difficulty'},{k:'p',l:'Sport Popularity'},{k:'i',l:'Health Importance'},{k:'t',l:'Ease of Testing'}];
+  box.innerHTML=metrics.map(m=>`
+    <div class="cmp-row">
+      <div class="cmp-met">${m.l}</div>
+      <div class="cmp-bars">${sel.map(c=>`
+        <div class="cmp-br">
+          <div class="cmp-lbl" style="color:${c.color}">${c.icon} ${c.name.split(' ')[0]}</div>
+          <div class="cmp-track"><div class="cmp-bfill" style="width:${c[m.k]}%;background:${c.color};"></div></div>
+          <div class="cmp-val" style="color:${c.color}">${c[m.k]}</div>
+        </div>`).join('')}
+      </div>
+    </div>`).join('');
+  box.classList.add('show');
+}
+
+// ════════ OBSERVER ════════
+function runObserver(){
+  const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');});},{threshold:0.06});
+  document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+}
+runObserver();
 </script>
 </body>
 </html>
